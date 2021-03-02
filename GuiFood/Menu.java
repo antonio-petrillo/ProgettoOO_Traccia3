@@ -1,0 +1,445 @@
+package GuiFood;
+
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
+import javax.swing.JTextField;
+
+import Classi.Controller;
+
+import javax.swing.JSeparator;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+import javax.swing.JMenuBar;
+import java.awt.FlowLayout;
+import java.awt.Cursor;
+
+public class Menu extends JFrame implements ActionListener,MouseListener {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    protected JFrame frame1;
+    private  String Acquista_cmd = "Acquista";
+    private  String ModificaProfilo_cmd = "Modifica Profilo";
+    private  String Uscire_cmd = "Uscire";
+    private  String Filtri_cmd = "Filtri";
+  
+    Controller ctrl;
+    
+    private JTextField textField_CosaPreferisciMangiare;
+    private JPanel panelContent2;
+    private JPanel panelContent1;
+    private JPanel container;
+	private JButton antipasti;
+	private JButton primi;
+	private JButton secondi;
+	private JButton contorni;
+	private JButton dolci;
+	private JButton bevande;
+	private JPanel panelContent3;
+	private JPanel panelContent4;
+	private JPanel panelContent5;
+	private JPanel panelContent6;
+
+
+    public Menu(Controller ctrl) {
+        setTitle("Menù");
+        this.getContentPane().setBackground(new Color(255, 165, 0));
+        this.setResizable(false);
+        this.setBounds(100, 100, 747, 504);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.getContentPane().setLayout(null);
+        this.ctrl=ctrl;
+                
+            
+        JPanel panel_1 = new JPanel();
+        panel_1.setBackground(new Color(255, 165, 0));
+        panel_1.setBounds(559, 0, 188, 481);
+        getContentPane().add(panel_1);
+        panel_1.setLayout(null);
+        
+        JLabel username = new JLabel("Nickname Utente");
+        username.setBounds(0, 22, 138, 16);
+        panel_1.add(username);
+        
+        JSeparator separator_1 = new JSeparator();
+        separator_1.setForeground(Color.WHITE);
+        separator_1.setBounds(0, 34, 188, 12);
+        panel_1.add(separator_1);
+
+
+        JSeparator separator_2 = new JSeparator();
+        separator_2.setForeground(Color.WHITE);
+        separator_2.setBounds(0, 436, 188, 12);
+        panel_1.add(separator_2);
+        
+        
+        JButton completeOrder = new JButton("Acquista");
+        completeOrder.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        completeOrder.setForeground(new Color(255, 140, 0));
+        completeOrder.setBounds(63, 446, 99, 29);
+        panel_1.add(completeOrder);
+		completeOrder.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./carrello.png")), 25, 25));
+        completeOrder.addActionListener(this);
+        completeOrder.setActionCommand(Acquista_cmd);
+        
+        
+        JPanel panel_servizi = new JPanel();
+        panel_servizi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panel_servizi.setOpaque(false);
+        panel_servizi.setEnabled(false);
+        panel_servizi.setFocusable(false);
+        panel_servizi.setBackground(new Color(255, 165, 0));
+        panel_servizi.setBounds(146, 6, 36, 32);
+        panel_1.add(panel_servizi);
+        
+        JMenuBar menuBar1 = new JMenuBar();
+        panel_servizi.add(menuBar1);
+        
+        JMenu Servizi = new JMenu("");
+        menuBar1.add(Servizi);
+		Servizi.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Menu.png")), 18, 18));
+        Servizi.addActionListener(this);
+
+        
+        JMenuItem ModificaProfilo = new JMenuItem("Modifica Profilo");
+        ModificaProfilo.setForeground(new Color(255, 140, 0));
+        Servizi.add(ModificaProfilo);
+		ModificaProfilo.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Modifica.png")), 20, 20));
+        ModificaProfilo.addActionListener(this);
+        ModificaProfilo.setActionCommand(ModificaProfilo_cmd);
+
+        
+        JMenuItem Uscire = new JMenuItem("Uscire");
+        Uscire.setForeground(new Color(255, 140, 0));
+        Servizi.add(Uscire);
+		Uscire.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Uscire.png")), 25, 25));
+        Uscire.addActionListener(this);
+        Uscire.setActionCommand(Uscire_cmd);
+
+                
+        JPanel globalContainer = new JPanel();
+        globalContainer.setBounds(0, 0, 560, 481);
+        getContentPane().add(globalContainer);
+        globalContainer.setLayout(null);
+      
+        
+        JPanel panelMenu = new JPanel();
+        panelMenu.setBackground(new Color(255, 140, 0));
+        panelMenu.setBounds(0, 0, 560, 111);
+        globalContainer.add(panelMenu);
+        panelMenu.setLayout(null);
+        
+        JPanel panelText = new JPanel();
+        panelText.setBackground(new Color(255, 140, 0));
+        panelText.setBounds(0, 0, 560, 51);
+        panelMenu.add(panelText);
+        panelText.setLayout(null);
+        
+        JSeparator separator_Ricerca = new JSeparator();
+        separator_Ricerca.setForeground(Color.WHITE);
+        separator_Ricerca.setBounds(6, 33, 248, 12);
+        panelText.add(separator_Ricerca);
+        
+        textField_CosaPreferisciMangiare = new JTextField();
+        textField_CosaPreferisciMangiare.setText("Cosa preferisci mangiare?");
+        textField_CosaPreferisciMangiare.setSelectionColor(null);
+        textField_CosaPreferisciMangiare.setForeground(Color.BLACK);
+        textField_CosaPreferisciMangiare.setFont(new Font("Times New Roman", Font.ITALIC, 14));
+        textField_CosaPreferisciMangiare.setDisabledTextColor(Color.LIGHT_GRAY);
+        textField_CosaPreferisciMangiare.setColumns(10);
+        textField_CosaPreferisciMangiare.setBorder(null);
+        textField_CosaPreferisciMangiare.setBackground(new Color(255, 140, 0));
+        textField_CosaPreferisciMangiare.setBounds(6, 6, 248, 28);
+        panelText.add(textField_CosaPreferisciMangiare);
+        textField_CosaPreferisciMangiare.addMouseListener((MouseListener) this);
+
+        
+        JButton btnCerca = new JButton("Cerca");
+        btnCerca.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnCerca.setForeground(new Color(255, 140, 0));
+        btnCerca.setFocusable(false);
+		btnCerca.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./ricerca.png")), 10, 10));
+        btnCerca.setBounds(253, 6, 79, 25);
+        panelText.add(btnCerca);
+
+        
+        JButton btnFiltri = new JButton("Filtri");
+        btnFiltri.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnFiltri.setForeground(new Color(255, 140, 0));
+        btnFiltri.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+        btnFiltri.setFocusable(false);
+		btnFiltri.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./filtri.png")), 21, 21));
+        btnFiltri.setActionCommand("Filtri");
+        btnFiltri.setBounds(446, 6, 108, 25);
+        panelText.add(btnFiltri);
+        
+        JPanel panelBtn = new JPanel();
+        panelBtn.setBackground(new Color(255, 140, 0));
+        panelBtn.setBounds(0, 44, 560, 51);
+        panelMenu.add(panelBtn);
+        panelBtn.setLayout(null);
+        
+        antipasti = new JButton("Antipasti");
+        antipasti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        antipasti.setForeground(new Color(255, 140, 0));
+        antipasti.setBackground(new Color(255, 255, 255));
+        antipasti.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        antipasti.setActionCommand("Antipasti");
+        antipasti.setBounds(6, 12, 102, 39);
+		antipasti.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./antipasti.png")), 30, 30));
+        panelBtn.add(antipasti);
+        antipasti.addActionListener(this);
+
+
+        
+        primi = new JButton("primi");
+        primi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        primi.setForeground(new Color(255, 140, 0));
+        primi.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        primi.setActionCommand("Primi");
+        primi.setBounds(107, 12, 84, 39);
+		primi.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./primi.png")), 30, 30));
+        panelBtn.add(primi);
+        primi.addActionListener(this);
+
+        
+        secondi = new JButton("secondi");
+        secondi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        secondi.setForeground(new Color(255, 140, 0));
+        secondi.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        secondi.setActionCommand("Secondi");
+        secondi.setBounds(189, 12, 96, 39);
+		secondi.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./secondi.png")), 30, 30));
+        panelBtn.add(secondi);
+        secondi.addActionListener(this);
+
+          
+        contorni = new JButton("contorni");
+        contorni.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        contorni.setForeground(new Color(255, 140, 0));
+        contorni.setActionCommand("Contorini");
+        contorni.setBounds(284, 11, 96, 39);
+		contorni.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./contorni.png")), 30, 30));
+        panelBtn.add(contorni);
+        contorni.addActionListener(this);
+        
+        dolci = new JButton("dolci");
+        dolci.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        dolci.setForeground(new Color(255, 140, 0));
+        dolci.setActionCommand("Dolci");
+        dolci.setBounds(379, 11, 84, 39);
+		dolci.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./dolci.png")), 30, 30));
+        panelBtn.add(dolci);
+        dolci.addActionListener(this);
+        
+        bevande = new JButton("bevande");
+        bevande.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        bevande.setForeground(new Color(255, 140, 0));
+        bevande.setActionCommand("Bevande");
+        bevande.setBounds(464, 11, 90, 39);
+		bevande.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./bevande.png")), 30, 30));
+        panelBtn.add(bevande);
+        bevande.addActionListener(this);
+        
+        panelMenu.add(panelBtn);
+        
+        container = new JPanel();
+        container.setBackground(new Color(255, 140, 0));
+        container.setBounds(0, 111, 560, 370);
+        globalContainer.add(container);
+        
+
+        JLabel lbl1 = new JLabel("PANEL 1");
+        panelContent1 = new JPanel();
+        panelContent1.setBackground(Color.CYAN);
+        panelContent1.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
+        panelContent1.add(lbl1);
+       
+        JLabel lbl2 = new JLabel("PANEL 2");
+        panelContent2 = new JPanel();
+        panelContent2.setBackground(Color.ORANGE);
+        panelContent2.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
+        panelContent2.add(lbl2);
+       
+        JLabel lbl3 = new JLabel("PANEL 3");
+        panelContent3 = new JPanel();
+        panelContent3.setBackground(Color.CYAN);
+        panelContent3.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
+        panelContent3.add(lbl3);
+        
+        JLabel lbl4 = new JLabel("PANEL 4");
+        panelContent4 = new JPanel();
+        panelContent4.setBackground(Color.ORANGE);
+        panelContent4.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
+        panelContent4.add(lbl4);
+        
+        JLabel lbl5 = new JLabel("PANEL 5");
+        panelContent5 = new JPanel();
+        panelContent5.setBackground(Color.CYAN);
+        panelContent5.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
+        panelContent5.add(lbl5);
+        
+        JLabel lbl6 = new JLabel("PANEL 6");
+        panelContent6 = new JPanel();
+        panelContent6.setBackground(Color.ORANGE);
+        panelContent6.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
+        panelContent6.add(lbl6);
+      
+        container.add(panelContent1);
+       
+       
+        globalContainer.add(panelMenu, BorderLayout.NORTH);
+        globalContainer.add(container, BorderLayout.NORTH);
+
+        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+          
+    }
+    
+     public void actionPerformed(ActionEvent e) {
+    	 
+    	  if(e.getActionCommand().equals(Filtri_cmd))
+			{
+				 // ctrl.Filtri(inserire stringa);
+			}
+    	  
+			else if(e.getActionCommand().equals(Acquista_cmd))
+			{
+				ctrl.visualizzazioneFattura(); 
+			}
+    	  
+			else if(e.getActionCommand().equals(ModificaProfilo_cmd)) 
+			{
+				  ctrl.ModificaProfilo(); 
+			}
+    	  
+		    else if(e.getActionCommand().equals(Uscire_cmd)) 	
+		    {
+		       if(JOptionPane.showConfirmDialog(null,"sicuro di voler uscire?")==0) {
+		    	     ctrl.visualizzazioneLogin(); 	
+	           }
+		       
+		    } else if(e.getSource( ) == antipasti) {
+		    	
+            	container.remove(panelContent2);
+            	container.remove(panelContent3);
+            	container.remove(panelContent4);
+            	container.remove(panelContent5);
+            	container.remove(panelContent6);
+                container.add(panelContent1);
+            	container.add(panelContent2);
+            	
+
+            } else if(e.getSource() == primi) {
+            	
+            	container.remove(panelContent1);
+                container.remove(panelContent6);
+                container.remove(panelContent4);
+                container.remove(panelContent5);
+                container.add(panelContent2); 
+                container.add(panelContent3);
+              
+                
+             } else if(e.getSource() == secondi) { 
+            	 
+           	    container.remove(panelContent2);
+           	    container.remove(panelContent4);
+           	    container.remove(panelContent5);
+           	    container.remove(panelContent6);
+                container.add(panelContent3);
+                container.add(panelContent1);
+
+
+             } else if(e.getSource() == contorni) {
+            	 
+                container.remove(panelContent2);
+                container.remove(panelContent6);
+                container.remove(panelContent1);
+            	container.remove(panelContent3);
+                container.remove(panelContent5);
+                container.add(panelContent4);
+                container.add(panelContent3);
+
+                   
+              }else if(e.getSource() == dolci) {
+            	  
+           	    container.remove(panelContent4);
+           	    container.remove(panelContent2);
+                container.remove(panelContent6);
+                container.remove(panelContent3);
+                container.add(panelContent5);
+                container.add(panelContent4);
+                container.add(panelContent6);
+                container.add(panelContent1);
+
+               
+              }else if(e.getSource() == bevande) {
+            	  
+                container.remove(panelContent4);
+                container.remove(panelContent1);
+                container.remove(panelContent5);
+                container.remove(panelContent2);
+                container.remove(panelContent3);
+              	container.add(panelContent6);
+                   	 
+               }   
+                            
+               container.revalidate();
+               container.repaint();             
+            }
+          
+    
+    @Override
+    public void mouseClicked(MouseEvent e) {
+    	textField_CosaPreferisciMangiare.setText("");  
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        
+    }
+
+	
+
+}
+     
+
+   
+         
+   
+
