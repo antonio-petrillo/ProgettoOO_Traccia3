@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="src" path="Codice/Food /Classi"/>
-	<classpathentry kind="src" path="Codice/Food /Dao"/>
-	<classpathentry kind="src" path="Codice/Food /GuiFood"/>
-	<classpathentry kind="lib" path="Codice/Food/miglayout15-swing.jar"/>
-	<classpathentry kind="output" path="Codice/Food /bin"/>
-</classpath>
