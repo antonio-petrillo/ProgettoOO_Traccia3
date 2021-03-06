@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="Food(Codice)/Classi"/>
+	<classpathentry kind="src" path="Food(Codice)/Dao"/>
+	<classpathentry kind="src" path="Food(Codice)/GuiFood"/>
+	<classpathentry kind="src" path="Food(Codice)/Immagini"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/anto/eclipse/workspace/progetto/postgresql-42.2.19.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

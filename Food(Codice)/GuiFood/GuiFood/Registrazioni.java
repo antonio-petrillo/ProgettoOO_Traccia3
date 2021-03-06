@@ -11,10 +11,13 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import Classi.Controller;
+import Classi.Indirizzo;
 import Classi.Utente;
 import java.awt.Cursor;
 
@@ -31,6 +34,10 @@ public  class Registrazioni extends JDialog implements ActionListener{
 	private JTextField textField_Cap;
 	private JTextField textField_NomeVia;
 	private JTextField textField_N_Civico;
+
+	private JButton Button_Iscriviti;
+	///
+	///
 	
     private  String Iscriviti_cmd = "Iscriviti";  
 
@@ -354,52 +361,22 @@ public  class Registrazioni extends JDialog implements ActionListener{
 		textField_N_Civico.setBounds(396, 289, 91, 12);
 		textField_Iscrizione.add(textField_N_Civico);
 		
-		JButton Button_Iscriviti = new JButton("Iscriviti");
+		Button_Iscriviti = new JButton("Iscriviti");
 		Button_Iscriviti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		Button_Iscriviti.setBounds(192, 334, 187, 29);
 		Button_Iscriviti.setForeground(new  Color(255, 165, 0));
 		textField_Iscrizione.add(Button_Iscriviti);
 		Button_Iscriviti.addActionListener(this);
-		Button_Iscriviti.setActionCommand(Iscriviti_cmd);
+//		Button_Iscriviti.setActionCommand(Iscriviti_cmd);
 				
 	}
 
 	 //TODO: RIVEDERE MEGLIO
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		 if(e.getActionCommand().equals(Iscriviti_cmd))
-		 {
-		 String password = textField_Password.getText();
-			boolean check_nome = ctrl.controllaCaratteriNonAmmessi(textField_Nome.getText());
-			boolean check_cognome =  ctrl.controllaCaratteriNonAmmessi(textField_Cognome.getText())  ;
-			boolean check_email =  ctrl.controllaCaratteriNonAmmessi(textField_Email.getText());
-			boolean check_numTelefonico =  ctrl.controllaCaratteriNonAmmessi(textField_NumTelefonico.getText());
-			boolean check_dataNascita =  ctrl.controllaCaratteriNonAmmessi(textField_DataNascita.getText());
-          if(check_nome && check_cognome && check_email && check_numTelefonico && check_dataNascita )
-          {
-        	 ctrl.creaUtente(new Utente(textField_Nome.getText(),textField_Cognome.getText(),textField_Email.getText(), password ,textField_NumTelefonico.getText(), textField_DataNascita.getText()));
-          }
-          else {
-        	  StringBuffer Messaggioerrore = new StringBuffer();
-        	  if(!check_nome) {
-        		  Messaggioerrore.append("•Nome\n");
-        	  } 
-        	  if(!check_cognome) {
-        		  Messaggioerrore.append("•Cognome\n");
-        	  }
-        	  if(!check_email) {
-        		  Messaggioerrore.append("•Email\n");
-        	  }
-        	  if(!check_numTelefonico) {
-        		  Messaggioerrore.append("•Telefono\n");
-        	  }
-        	  if(!check_dataNascita) {
-        		  Messaggioerrore.append("•Data di nascita\n");
-        	  }
-        	  ctrl.VisualizzazioneAvvisi(Messaggioerrore.toString());
-          }
-  
-		 }
+		if(e.getSource().equals(Button_Iscriviti)) {
+			
+		}
 	}
 }
 

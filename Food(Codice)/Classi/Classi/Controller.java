@@ -3,6 +3,8 @@ package Classi;
 
 import java.awt.Image;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ImageIcon;
 
@@ -23,8 +25,10 @@ public class Controller {
     private Menu menu;
     private Utente utente;
 
-    private DaoUtente daoUtente = new DaoUtenteDatabase();
-
+    private ArrayList<Ristorante> ristoranti;
+    private ArrayList<Prodotto> prodotti;
+    private ArrayList<Rider> riders;
+    
 	public Controller() {
 		login = new Login(this);
 		login.setVisible(true);
@@ -38,23 +42,22 @@ public class Controller {
 		 loginApp.setLocationRelativeTo(login);
 	   }
 	 
-	   public void visualizzazioneRegistrazione() {
+	 public void visualizzazioneRegistrazione() {
 		    registrazione = new Registrazioni(this);
 		    registrazione.setVisible(true);
 		    registrazione.setLocationRelativeTo(login);
-	   }
+	 }
    
-	   public void visualizzazioneMenu()
-   {
-   	if(menu==null)
-   	{
-   		menu = new Menu(this);
-   		menu.setLocationRelativeTo(null);
-   		login.dispose();
-   		login.setVisible(false);
-   	}
+	 public void visualizzazioneMenu() {
+   	 if(menu==null)
+   		{
+   			menu = new Menu(this);
+   			menu.setLocationRelativeTo(null);
+   			login.dispose();
+   			login.setVisible(false);
+   		}
     	menu.setVisible(true);	
-   }
+    }
 	  
     public void VisualizzazioneAvvisi(String stringErroreCommesso) 
     {
@@ -110,94 +113,41 @@ public class Controller {
 		return true;
 	}
 	
-
-	public void creaUtente(Utente utente) 
-	{
-		if(inputVuoto(utente)==false){
-			{
-				try {
-					if(daoUtente.creaUtente(utente))
-					{
-						VisualizzazioneAvvisi("Iscrizione Effettuata con successo");
-					}
-					else
-					{
-						VisualizzazioneAvvisi("Utente già presente");
-					}
-				} catch (SQLException e) {
-					VisualizzazioneAvvisi(e.getMessage());
-				}
-				catch(Exception e)
-				{
-					VisualizzazioneAvvisi(e.getMessage());
-				}
-			}
-		}
-		else
-		{
-			VisualizzazioneAvvisi("alcuni campi sono vuoti");
-		}
-	}
-	
-	public void resetPassword(Utente utente,char[] nPassword ) {
-		String nuovaPassword=new String(nPassword);
-			try {
-				if(daoUtente.cambiaPWD(utente,nuovaPassword))
-				{
-					VisualizzazioneAvvisi("Password Aggiornata");
-				}
-				else
-				{
-					VisualizzazioneAvvisi("Password non aggiornata utente non presente o password\n precedente errata");
-				}
-			}catch(SQLException e)
-			{
-				VisualizzazioneAvvisi("Errore del database riprova piu tardi");
-			}
-			catch(Exception e)
-			{
-			    VisualizzazioneAvvisi(e.getMessage());
-			}
-		}
-	
-    public boolean inputVuoto(Utente utente)
-	{
-		if(utente.getNome().isEmpty()==true || (utente.getCognome().isEmpty())==true || (utente.getEmail().isEmpty())==true || (utente.getNumeroTelefonico().isEmpty()==true) || (utente.getDataDiNascita().isEmpty())==true || (utente.getPassword().isEmpty()==true))
-		{
-			return true;
-		}
-		return false;
-	}
-    
-    public void effettuaAccesso(Utente utente)
-    {
-    	try
-    	{
-    		if(daoUtente.effettua_accesso(utente.getEmail(),utente.getPassword()))
-    		{
-    			
-    			visualizzazioneMenu();
-    		}
-    		else
-    		{
-    			VisualizzazioneAvvisi("utente o password errati");
-    		}
-    	}
-    	catch(SQLException e)
-    	{
-    		VisualizzazioneAvvisi(e.getMessage());
-    	}
-    	catch(Exception e)
-    	{
-    		VisualizzazioneAvvisi("errore");
-    	}
-    }
-
-	  public  ImageIcon scaleImageIcon(ImageIcon image, int width, int height) {
+	  public ImageIcon scaleImageIcon(ImageIcon image, int width, int height) {
 			Image tmp = image.getImage();
 			Image scaledImage = tmp.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
 			ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
 			return scaledImageIcon;
 		}
+	  /////////////////////////////
+	  
+	  public boolean effettuaRegistrazione(String nome, String cognome, String email, String password,  String numeroTelefono, 
+				// TODO : aggiungere le chiamate a visualizza errore
+				String nomeVia, int numeroCivico, String cap, String citta, String provincia) {
+			DaoUtente daoUtente = new DaoUtenteDatabase();
+			DaoIndirizzo daoIndirizzo = new DaoIndirizzoDatabase();
+			boolean insertSucced = false;
+			int codiceIndirizzo = -1;
+			try {
+				if(! daoUtente.esisteUtente(email)) {
+					if(! daoIndirizzo.esisteIndirizzo(nomeVia, numeroCivico, cap, citta, provincia)) {
+						daoIndirizzo.inserisciNuovoIndirizzo(nomeVia, numeroCivico, cap, citta, provincia);
+					}
+					codiceIndirizzo = daoIndirizzo.ottieniCodiceIndirizzo(nomeVia, numeroCivico, cap, citta, provincia);
+					daoUtente.inserisciNuovoUtente(nome, cognome, email, password, numeroTelefono, codiceIndirizzo);
+					insertSucced = true;
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return insertSucced;
+		} 
+	  
+	  public boolean costruisciDominio() {
+		 return false; 
+	  }
+	  
 
 }

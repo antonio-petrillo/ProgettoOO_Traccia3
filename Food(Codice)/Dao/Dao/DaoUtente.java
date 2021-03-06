@@ -5,12 +5,10 @@ import Classi.Utente;
 
 public interface DaoUtente {
 
-	public boolean creaUtente(Utente utente) throws SQLException,Exception;
+	public boolean esisteUtente(String email) throws SQLException, ClassNotFoundException;	
 	
-	public boolean cambiaPWD(Utente utente,String nuovaPassword ) throws SQLException, Exception;
+	public boolean concediAccesso(String email, String password); 	
+
+	public boolean inserisciNuovoUtente(String nome, String cognome, String email, String password, String numeroTelefono, int codiceIndirizzo);	
 	
-	public boolean effettua_accesso(String Email, String password) throws SQLException, Exception;
-
-	//public boolean modificaProfilo() throws SQLException, Exception; -->Fare
-
 }

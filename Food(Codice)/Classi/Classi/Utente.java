@@ -8,19 +8,26 @@ public class Utente {
 	private String cognome;
 	private String email;
 	private String password;
-    private String dataDiNascita;
     private String numeroTelefonico;
 	private Indirizzo indirizzo;
 	private ArrayList<Ordine> ordini;
 	
 	// TODO : costruttore con indirizzo
-   public  Utente(String nome, String cognome, String email, String password, String dataDiNascita,String numeroTelefonico) {
+   public  Utente(String nome, String cognome, String email, String password, String numeroTelefonico) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.email = email;
 		this.password = password;
-		this.dataDiNascita = dataDiNascita;
 		this.numeroTelefonico = numeroTelefonico;
+	}
+
+   public  Utente(String nome, String cognome, String email, String password, String dataDiNascita,String numeroTelefonico, Indirizzo indirizzo) {
+		this.nome = nome;
+		this.cognome = cognome;
+		this.email = email;
+		this.password = password;
+		this.numeroTelefonico = numeroTelefonico;
+		this.indirizzo = indirizzo;
 	}
 
 	public Utente(String Email)
@@ -80,14 +87,6 @@ public class Utente {
 
 	public void setIndirizzo(Indirizzo indirizzo) {
 		this.indirizzo = indirizzo;
-	}
-
-	public String getDataDiNascita() {
-		return dataDiNascita;
-	}
-
-	public void setDataDiNascita(String dataDiNascita) {
-		this.dataDiNascita = dataDiNascita;
 	}
 
 }

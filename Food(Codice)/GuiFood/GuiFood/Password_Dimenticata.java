@@ -126,8 +126,10 @@ public class Password_Dimenticata extends JDialog implements ActionListener,Mous
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			boolean check_nome = ctrl.controllaCaratteriNonAmmessi(textField_Email.getText());
-			if(check_nome)
-				ctrl.resetPassword(new Utente(textField_Email.getText()),textField_Password.getPassword());
+			if(check_nome) {
+				// TODO : controlla
+	//			ctrl.resetPassword(new Utente(textField_Email.getText()),textField_Password.getPassword());
+			}
 			else
 				ctrl.VisualizzazioneAvvisi("ERRORE : il campo nome contiene uno dei seguenti caratteri : [* , / -] . Ometterli.");
 		}

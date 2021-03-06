@@ -8,9 +8,17 @@ public class DBconnection {
 	
 	private DBconnection()throws SQLException,ClassNotFoundException
 	{
+		// TODO : cambia l'url a localhost
 		Class.forName("org.postgresql.Driver");
-		String url="jdbc:postgresql://localhost:5432/Food";
-		conn=DriverManager.getConnection(url,"postgres","1234.ciao");
+		String url="jdbc:postgresql://192.168.1.37:5432/postgres";
+		String user = "postgres";
+		String password = "password";
+		conn = DriverManager.getConnection(url, user, password);
+		System.out.println("connesione al database effettuata con successo");
+		String query = "SET search_path TO fooddb";
+		PreparedStatement stmt = conn.prepareStatement(query);
+		stmt.execute();
+		System.out.println("Search path impostato con successo");
 	}
 
 	public Connection getConn() {

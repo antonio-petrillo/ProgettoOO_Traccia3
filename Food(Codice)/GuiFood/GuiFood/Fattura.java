@@ -28,10 +28,10 @@ public class Fattura extends JFrame implements ActionListener {
     private JTextField textField_CAP;
     private JTextField textField_IndirizzoEmail;
     private JTextField textField_Riders;
-    private  String Indietro_cmd = "Indietro";  
-    private  String ScegliRiders_cmd = "Scegli riders";
-    private  String Annulla_cmd = "Annulla";
-    private  String EffettuaOrdine_cmd = "Effettua Ordine";
+    private String Indietro_cmd = "Indietro";  
+    private String ScegliRiders_cmd = "Scegli riders";
+    private String Annulla_cmd = "Annulla";
+    private String EffettuaOrdine_cmd = "Effettua Ordine";
     private Controller ctrl;
 
 	public Fattura(Controller ctrl){

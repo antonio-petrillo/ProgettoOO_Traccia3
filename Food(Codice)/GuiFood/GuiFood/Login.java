@@ -14,17 +14,18 @@ import javax.swing.JSeparator;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import Classi.Controller;
-import Classi.Utente;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.Cursor;
 
-public  class Login extends JFrame implements ActionListener,MouseListener{
+public  class Login extends JFrame implements ActionListener,MouseListener,KeyListener{
 	private static final long serialVersionUID = 1L;
 	private JPasswordField textField_Password;
-	private JTextField textFild_Email;
+	private JTextField textField_Email;
     private  String PasswordDimenticata_cmd = "Hai dimenticato la password?";
     private  String Registrati_cmd = "Registrati!";
     private Controller ctrl;
@@ -49,6 +50,7 @@ public  class Login extends JFrame implements ActionListener,MouseListener{
 		Label_Email.setForeground(new Color(255, 255, 255));
 		Label_Email.setBounds(593, 162, 61, 16);
 		this.getContentPane().add(Label_Email);
+
 		
 		JLabel lblIconaEmail = new JLabel("");
 		lblIconaEmail.setBounds(593, 181, 21, 20);
@@ -60,16 +62,17 @@ public  class Login extends JFrame implements ActionListener,MouseListener{
 		separator_email.setBounds(593, 196, 138, 12);
 		this.getContentPane().add(separator_email);
 			
-		textFild_Email = new JTextField();		
-    	textFild_Email.setSelectionColor(null);
-		textFild_Email.setDisabledTextColor(new Color(255, 140, 0));
-		textFild_Email.setForeground(Color.BLACK);
-		textFild_Email.setText("Inserisci l'email");
-		textFild_Email.setBackground(new Color(255, 165, 0));
-		textFild_Email.setBorder(null);
-		textFild_Email.setBounds(613, 179, 118, 22);
-	    textFild_Email.addMouseListener((MouseListener) this);
-		this.getContentPane().add(textFild_Email);
+		textField_Email = new JTextField();		
+    	textField_Email.setSelectionColor(null);
+		textField_Email.setDisabledTextColor(new Color(255, 140, 0));
+		textField_Email.setForeground(Color.BLACK);
+		textField_Email.setText("Inserisci la tua email");
+		textField_Email.setBackground(new Color(255, 165, 0));
+		textField_Email.setBorder(null);
+		textField_Email.setBounds(613, 179, 118, 22);
+	    textField_Email.addMouseListener((MouseListener) this);
+	    textField_Email.addKeyListener((KeyListener) this);
+		this.getContentPane().add(textField_Email);
 			
 		JLabel Label_Password = new JLabel("Password");
 		Label_Password.setForeground(new Color(255, 255, 255));
@@ -84,7 +87,6 @@ public  class Login extends JFrame implements ActionListener,MouseListener{
 			}
 		});
 		textField_Password.setForeground(Color.BLACK);
-		textField_Password.setText("123456789");
 		textField_Password.setBackground(new Color(255, 165, 0));
 		textField_Password.setBorder(null);
 		textField_Password.setBounds(613, 237, 118, 22);
@@ -158,14 +160,16 @@ public  class Login extends JFrame implements ActionListener,MouseListener{
 				else
 			{
 				String password=new String(textField_Password.getPassword());
-				ctrl.effettuaAccesso(new Utente(textFild_Email.getText(),password));
+				// TODO : effettua accesso
+//				ctrl.effettuaAccesso(new Utente(textField_Email.getText(),password));
 				ctrl.visualizzazioneMenu();
 			}
 
      }
       
+		@Override
 		public void mouseClicked(MouseEvent e) {
-			textFild_Email.setText(""); 
+
 		}
 
 		@Override
@@ -180,11 +184,43 @@ public  class Login extends JFrame implements ActionListener,MouseListener{
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			
+			if(e.getSource().equals(textField_Email)) {
+				if(textField_Email.getText().equalsIgnoreCase("Inserisci la tua email")) {
+					textField_Email.setText("");
+				}
+			}
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e) {
+			if(e.getSource().equals(textField_Email)) {
+				if(textField_Email.getText().equalsIgnoreCase("")) {
+					textField_Email.setText("Inserisci la tua email");
+				}
+			}
+		}
+
+		@Override
+		public void keyTyped(KeyEvent e) {
+			if(e.getSource().equals(textField_Email)) {
+				if(e.getKeyChar() == KeyEvent.VK_BACK_SPACE && textField_Email.getText().equals("")) {
+					textField_Email.setText("Inserisci la tua email");
+				}
+			}
+		}
+
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getSource().equals(textField_Email)) {
+				if(textField_Email.getText().equals("Inserisci la tua email")) {
+					textField_Email.setText("");
+				}
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
 			
 		}
      

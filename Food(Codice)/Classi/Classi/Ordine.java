@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Ordine {
-
 	// TODO : getter and setter di utente e ristorante
 	private double prezzo;
 	private boolean stato;

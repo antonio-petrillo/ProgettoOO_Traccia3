@@ -1,80 +1,42 @@
 package Classi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Ristorante {
 	
 	private String nome;
-	private String categoria;
-	private String descrizioni;
+	private String descrizione;
 	private String numeroTelefonico;
-	private ArrayList<Magazzino> magazzini;
     private ArrayList<Rider> riders;
 	private Indirizzo indirizzo;
+	private int codiceRistorante;
+	private ArrayList<Prodotto> prodottiInVendita;
+	private HashMap<Prodotto, Integer> quantitaProdotto;
 
- 	public String getNome() {
-		return nome;
-	}
-	
-	public void setNome(String nome) {
+	public Ristorante(String nome, int codiceRistorante) {
 		this.nome = nome;
+		this.codiceRistorante = codiceRistorante;
+		this.riders = new ArrayList<Rider>();
+		this.prodottiInVendita = new ArrayList<Prodotto>();
+		this.quantitaProdotto = new HashMap<Prodotto, Integer>();
 	}
 	
-	public String getCategoria() {
-		return categoria;
-	}
-	
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-	
-	public String getDescrizioni() {
-		return descrizioni;
-	}
-	
-	public void setDescrizioni(String descrizioni) {
-		this.descrizioni = descrizioni;
-	}
-	
-	public String getNumeroTelefonico() {
-		return numeroTelefonico;
-	}
-	
-	public void setNumeroTelefonico(String numeroTelefonico) {
-		this.numeroTelefonico = numeroTelefonico;
-	}
-	
-	public Indirizzo getIndirizzo() {
-		return indirizzo;
-	}
-	
-	public void setIndirizzo(Indirizzo indirizzo) {
-		this.indirizzo = indirizzo;
-	}
-	
-	public Ristorante(String nome, String categoria, String descrizioni, String numeroTelefonico, Indirizzo indirizzo,
-			String citta) {
-		this.nome = nome;
-		this.categoria = categoria;
-		this.descrizioni = descrizioni;
-		this.numeroTelefonico = numeroTelefonico;
-		this.indirizzo = indirizzo;
-	}
-	
-	public  ArrayList<Magazzino> getMagazzino() {
-		return magazzini;
-	}
-	
-	public void setMagazzino( ArrayList<Magazzino> magazzino) {
-		this.magazzini = magazzino;
+	public Ristorante(Integer codiceRistorante) {
+		this.codiceRistorante = codiceRistorante;
+		this.riders = new ArrayList<Rider>();
 	}
 
-	public ArrayList<Rider> getRider() {
+	public Ristorante(String nome, int codiceRistorante, ArrayList<Rider> riders, ArrayList<Prodotto> merce, HashMap<Prodotto, Integer> quantitaProdotto) {
+		this.nome = nome;
+		this.codiceRistorante = codiceRistorante;
+		this.riders = riders;
+		this.prodottiInVendita = merce;
+		this.quantitaProdotto = quantitaProdotto; 
+	}
+
+	public ArrayList<Rider> getRiders() {
 		return riders;
-	}
-
-	public void setRider(ArrayList<Rider> rider) {
-		this.riders = rider;
 	}
 
 }

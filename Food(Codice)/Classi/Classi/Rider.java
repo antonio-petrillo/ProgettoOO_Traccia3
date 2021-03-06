@@ -1,6 +1,7 @@
 package Classi;
 
 import java.awt.Image;
+import java.util.ArrayList;
 import java.util.Set;
 
 public class Rider {
@@ -9,70 +10,23 @@ public class Rider {
 	private String cognome;
 	private String biografia;
 	private Image fotoRider;
-	private String percorsoFoto;
-	private Set<Veicolo> veicolo;
+	private String pathFoto;
+	private int codiceRider;
+	private ArrayList<Veicolo> parcoVeicoli = new ArrayList<Veicolo>() ;
 	private Ristorante[] ristoranteAssociato = new Ristorante[3];
-    
-	public Rider(String nome, String cognome, String biografia) {
+    private int indexRistoranteAssociato = 0;
+	
+	public Rider(String nome, String cognome, String biografia, String pathFoto, int codiceRider, ArrayList<Veicolo> parcoVeicoli) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.biografia = biografia;
+		this.pathFoto = pathFoto;
+		this.codiceRider = codiceRider;
+		this.parcoVeicoli = parcoVeicoli;
 	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCognome() {
-		return cognome;
-	}
-
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
-	}
-
-	public String getBiografia() {
-		return biografia;
-	}
-
-	public void setBiografia(String biografia) {
-		this.biografia = biografia;
-	}
-
-	public Image getFotoRiders() {
-		return fotoRider;
-	}
-
-	public void setFotoRiders(Image fotoRider) {
-		this.fotoRider = fotoRider;
-	}
-
-	public Set<Veicolo> getVeicolo() {
-		return veicolo;
-	}
-
-	public void Set(Set<Veicolo> veicolo) {
-		this.veicolo = veicolo;
-	}
-
-	public Ristorante[] getRistoranteAssociato() {
-		return ristoranteAssociato;
-	}
-
-	public void setRistoranteAssociato(Ristorante[] ristoranteAssociato) {
-		this.ristoranteAssociato = ristoranteAssociato;
-	}
-
-	public String getCodiceFoto() {
-		return percorsoFoto;
-	}
-
-	public void setCodiceFoto(String codiceFoto) {
-		this.percorsoFoto = codiceFoto;
+	
+	public void addRistoranteAssociato(Ristorante ristorante) {
+		this.ristoranteAssociato[indexRistoranteAssociato++] = ristorante;
 	}
 
 }
