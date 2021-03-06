@@ -50,7 +50,7 @@ CREATE TABLE prodotto(
 );
 
 CREATE TABLE fornitura(
-    quantitaProdotto INTEGER,
+    quantitaProdotto INTEGER CHECK (IS NOT NULL AND quantitaProdotto > 0),
     codiceSeriale SERIAL ,
     codiceRistorante SERIAL ,
     PRIMARY KEY (codiceSeriale, codiceRistorante),
@@ -95,8 +95,9 @@ CREATE TABLE corrierePer(
 );
 
 CREATE TABLE carrello(
+    data DATE NOT NULL,
     codiceCarrello SERIAL PRIMARY KEY,
-    evaso BOOLEAN NOT NULL); 
+    ); 
 
 CREATE TABLE composizioneCarrello(
     codiceCarrello SERIAL,
@@ -111,8 +112,22 @@ CREATE TABLE composizioneCarrello(
     ON DELETE CASCADE
 );
 
--- view utili per ottenere dati dal database
-CREATE VIEW utenteIndirizzo AS 
-SELECT u.nome, u.cognome, u.email, u.numeroTelefono, i.nomeVia, i.numeroCivico, i.cap, i.citta, i.provincia
-FROM utente AS u JOIN indirizzo AS i 
-ON u.codiceIndirizzo = i.codiceIndirizzo;
+CREATE TABLE ordine(
+    codiceCarrello SERIAL,
+    email VARCHAR(64),
+    codiceRistorante SERIAL,
+    codiceRider SERIAL,
+    PRIMARY KEY(codiceCarrello, email, codiceRistorante, codiceRider),
+    CONSTRAINT fk_carrello FOREIGN KEY(codiceCarrello) REFERENCES carrello(codiceCarrello)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    CONSTRAINT fk_utente FOREIGN KEY(email) REFERENCES utente(email)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    CONSTRAINT fk_rider FOREIGN KEY(codiceRider) REFERENCES rider(codiceRider)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE,
+    CONSTRAINT fk_ristorante FOREIGN KEY(codiceRistorante) REFERENCES ristorante(codiceRistorante)
+    ON UPDATE CASCADE
+    ON DELETE CASCADE
+);

@@ -1,23 +1,44 @@
 package Classi;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Carrello {
 	
 	// TODO : metodo aggiungi prodotti, rimuovi prodotti, cambia quantita
-	private Prodotto prodotti[];
+	private int codiceCarrello;
+	private ArrayList<Prodotto> prodotti;
 	private HashMap<Prodotto, Integer> quantitaProdotto; // coppia prodotto, quantita
 	
-	public Carrello(Prodotto[] prodotto) {
-		this.prodotti = prodotto;
+	public Carrello(int codiceCarrello) {
+		this.codiceCarrello = codiceCarrello;
+		this.prodotti = new ArrayList<Prodotto>();
+		this.quantitaProdotto = new HashMap<Prodotto, Integer>();
 	}
 
-	public Prodotto[] getProdotto() {
+	public int getCodiceCarrello() {
+		return codiceCarrello;
+	}
+
+	public ArrayList<Prodotto> getProdotti() {
 		return prodotti;
 	}
 
-	public void setProdotto(Prodotto[] prodotto) {
-		this.prodotti = prodotto;
+	public HashMap<Prodotto, Integer> getQuantitaProdotto() {
+		return quantitaProdotto;
+	}
+
+	public void aggiungiProdotto(Prodotto prodotto, int quantita) {
+		if(! this.getProdotti().contains(prodotto)) {
+			this.getProdotti().add(prodotto);
+			this.getQuantitaProdotto().put(prodotto, quantita);
+		}else {
+			this.getQuantitaProdotto().replace(prodotto, this.getQuantitaProdotto().get(prodotto) + quantita);
+		}
+	}
+	
+	public void cambiaQuantita(Prodotto prodotto, int quantita) {
+		this.aggiungiProdotto(prodotto, quantita);
 	}
 	
 	public double getTotale() {
@@ -27,5 +48,5 @@ public class Carrello {
 		}
 		return totale; 
 	}
-
+	
 }

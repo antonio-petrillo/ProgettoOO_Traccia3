@@ -53,7 +53,7 @@ public class DaoRistoranteDatabase implements DaoRistorante {
 					disponibilita.putIfAbsent(nuovoProdotto, quantitaProdotto);
 					tmpRistorante = new Ristorante(nomeRistorante, codiceRistorante, riders, prodotti, disponibilita); 
 					ristoranti.add(tmpRistorante);
-					this.costruisciAssociazioni(ristoranti);
+					this.costruisciAssociazioniRider(ristoranti);
 				}
 			}
 		} catch (ClassNotFoundException | SQLException e) {
@@ -63,7 +63,23 @@ public class DaoRistoranteDatabase implements DaoRistorante {
 		return ristoranti;
 	}
 	
-	private void costruisciAssociazioni(ArrayList<Ristorante> ristoranti) {
+	public boolean aggiornaForniture(int codiceRistorante, int codiceProdotto, int nuovaQuantita) {
+		boolean updateSucced = false;
+		String query = "UPDATE fornitura SET quantitaProdotto = ? WHERE codiceRistorante = ? AND codiceProdotto = ?";
+		try {
+			Connection connection = DBconnection.getInstance().getConn();
+			PreparedStatement stmt = connection.prepareStatement(query);
+			stmt.setInt(1, nuovaQuantita);
+			stmt.setInt(2, codiceRistorante);
+			stmt.setInt(3, codiceProdotto);
+			updateSucced = stmt.execute();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		return updateSucced;
+	}
+	
+	private void costruisciAssociazioniRider(ArrayList<Ristorante> ristoranti) {
 		for(Ristorante ristorante: ristoranti) {
 			ArrayList<Rider> riders = ristorante.getRiders();
 			for(Rider rider : riders) {

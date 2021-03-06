@@ -11,6 +11,10 @@ public class Ristorante {
     private ArrayList<Rider> riders;
 	private Indirizzo indirizzo;
 	private int codiceRistorante;
+	public int getCodiceRistorante() {
+		return codiceRistorante;
+	}
+
 	private ArrayList<Prodotto> prodottiInVendita;
 	private HashMap<Prodotto, Integer> quantitaProdotto;
 

@@ -54,13 +54,6 @@ INSERT INTO prodotto(nome, prezzo, scadenza, pathFoto, tipoProdotto, categoria) 
 ('vino-bianco', 3.50, '2021-07-10', '/', 'bevanda', 'alcolico'),
 ('mojito', 4.00, '2021-11-03', '/', 'bevanda', 'alcolico');
 
-INSERT INTO magazzino(nome, codiceIndirizzo) VALUES
-('darryl', 3),
-('solaria', 5),
-('trator', 6),
-('grande-magazzino', 5),
-('douglas', 7);
-
 INSERT INTO ristorante(nome, descrizione, numeroTelefono, codiceIndirizzo) VALUES
 ('gnab-gib', 'ristorante al termine dell`universo', '0001112229', 7),
 ('eco', 'il nome sta per economico', '8000774563', 6),
@@ -91,54 +84,6 @@ INSERT INTO veicolo(annoImmatricolazione, marca, modello, tipoVeicolo, codiceRid
 ('2020-01-18', 'volta', 'greenpower', 'bicicletta', 6),
 ('2020-01-18', 'volta', 'semigreenpower', 'moto', 6);
 
-INSERT INTO disponibilitaMagazzino(codiceMagazzino, codiceSeriale, quantita) VALUES
-(1, 21, 33),
-(1, 29, 12),
-(1, 28, 49),
-(1, 7, 20),
-(1, 22, 81),
-(1, 5, 7),
-(1, 6, 16),
-(1, 19, 6),
-(2, 8, 11),
-(2, 9, 21),
-(2, 20, 15),
-(2, 29, 11),
-(2, 30, 46),
-(2, 12, 6),
-(3, 1, 100),
-(3, 2, 47),
-(3, 3, 69),
-(3, 23, 150),
-(3, 24, 80),
-(3, 25, 8),
-(3, 26, 86),
-(3, 27, 48),
-(4, 4, 14),
-(4, 10, 21),
-(4, 11, 32),
-(4, 13, 44),
-(4, 14, 73),
-(4, 18, 89),
-(5, 15, 58),
-(5, 16, 91),
-(5, 17, 8),
-(5, 22, 81);
-
-INSERT INTO fornitura(codiceMagazzino, codiceRistorante) VALUES
-(1, 1),
-(1, 2),
-(2, 1),
-(2, 2),
-(2, 3),
-(3, 2),
-(3, 3),
-(4, 1),
-(4, 2),
-(4, 3),
-(5, 1),
-(5, 3);
-
 INSERT INTO corrierePer(codiceRider, codiceRistorante) VALUES
 (1, 1),
 (1, 2),
@@ -154,3 +99,37 @@ INSERT INTO corrierePer(codiceRider, codiceRistorante) VALUES
 (6, 2),
 (6, 3),
 (7, 1);
+
+INSERT INTO fornitura(codiceRistorante, codiceSeriale, quantitaProdotto) VALUES
+(1, 1, 120),
+(1, 2, 46),
+(1, 3, 19),
+(1, 4, 21),
+(1, 12, 70),
+(1, 17, 23),
+(1, 27, 37),
+(1, 22, 200),
+(1, 23, 160),
+(2, 5, 9),
+(2, 6, 16),
+(2, 7, 40),
+(2, 8, 12),
+(2, 9, 27),
+(2, 10, 33),
+(2, 11, 70),
+(2, 12, 14),
+(2, 13, 70),
+(2, 14, 48),
+(2, 20, 84),
+(2, 21, 68),
+(2, 19, 18),
+(2, 18, 81),
+(2, 16, 100),
+(3, 15, 32),
+(3, 24, 12),
+(3, 25, 72),
+(3, 26, 48),
+(3, 28, 87),
+(3, 27, 23),
+(3, 29, 31),
+(3, 30, 21);

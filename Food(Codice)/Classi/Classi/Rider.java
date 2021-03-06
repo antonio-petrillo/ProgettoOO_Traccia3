@@ -12,6 +12,10 @@ public class Rider {
 	private Image fotoRider;
 	private String pathFoto;
 	private int codiceRider;
+	public int getCodiceRider() {
+		return codiceRider;
+	}
+
 	private ArrayList<Veicolo> parcoVeicoli = new ArrayList<Veicolo>() ;
 	private Ristorante[] ristoranteAssociato = new Ristorante[3];
     private int indexRistoranteAssociato = 0;

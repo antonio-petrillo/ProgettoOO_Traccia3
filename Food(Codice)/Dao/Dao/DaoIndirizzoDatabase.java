@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import Classi.Indirizzo;
+
 public class DaoIndirizzoDatabase implements DaoIndirizzo {
 
 	public boolean esisteIndirizzo(String nomeVia, int numeroCivico, String cap, String citta, String provincia) throws SQLException, ClassNotFoundException {
@@ -57,4 +59,23 @@ public class DaoIndirizzoDatabase implements DaoIndirizzo {
 		}
 		return codiceIndirizzo;
 	}
+	
+	public Indirizzo ottieniIndirizzo(int codiceIndirizzo) throws ClassNotFoundException, SQLException {
+		Indirizzo indirizzo = null;
+		String query = "SELECT I.nomeVia, I.numeroCivico, I.cap, I.citta, I.provincia FROM indirizzo AS I WHERE I.codiceIndirizzo = ?";
+		Connection connection = DBconnection.getInstance().getConn();
+		PreparedStatement stmt = connection.prepareStatement(query);
+		stmt.setInt(1, codiceIndirizzo);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			String nomeVia = rs.getString("nomeVia");
+			int numeroCivico = rs.getInt("numeroCivico");
+			String cap = rs.getString("cap");
+			String citta = rs.getString("citta");
+			String provincia = rs.getString("provincia");
+			indirizzo = new Indirizzo(nomeVia, numeroCivico, cap, citta, provincia);
+		}
+		return indirizzo;
+	}
+	
 }

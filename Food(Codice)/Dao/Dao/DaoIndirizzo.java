@@ -2,6 +2,8 @@ package Dao;
 
 import java.sql.SQLException;
 
+import Classi.Indirizzo;
+
 public interface DaoIndirizzo {
 
 	public boolean esisteIndirizzo(String nomeVia, int numeroCivico, String cap, String citta, String provincia) throws SQLException, ClassNotFoundException;
@@ -10,4 +12,6 @@ public interface DaoIndirizzo {
 	
 	public int ottieniCodiceIndirizzo(String nomeVia, int numeroCivico, String cap, String citta, String provincia) throws SQLException, ClassNotFoundException;	
 
+	public Indirizzo ottieniIndirizzo(int codiceIndirizzo) throws ClassNotFoundException, SQLException;
+	
 }

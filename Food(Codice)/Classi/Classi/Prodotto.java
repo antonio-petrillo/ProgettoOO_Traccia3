@@ -15,6 +15,10 @@ public class Prodotto {
 	private String nome;
 	private double prezzo;
 	private int codiceSeriale;
+	public int getCodiceSeriale() {
+		return codiceSeriale;
+	}
+
 	private String descrizione;
 	private Date scadenzaProdotto;
 	private ImageIcon fotoProdotto = null;

@@ -62,4 +62,55 @@ public class DaoUtenteDatabase implements DaoUtente {
 		return insertSucced;
 	}
 	
+	public Utente effettuaAccesso(String email, String password) throws SQLException, ClassNotFoundException {
+		Utente loggedUser = null;
+		String query = "SELECT * FROM utente";
+		DaoIndirizzo daoIndirizzo = new DaoIndirizzoDatabase();
+		if(esisteUtente(email) && concediAccesso(email, password)) {
+			Connection connection = DBconnection.getInstance().getConn();
+			PreparedStatement stmt = connection.prepareStatement(query);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()) {
+				String nome = rs.getString("nome");
+				String cognome = rs.getString("cognome");
+				// email e password li ho gia (in realta' in utente non si dovrebbe inserire il campo password)
+				String numeroTelefono = rs.getString("numeroTelefono");
+				int codiceIndirizzo = rs.getInt("codiceIndirizzo");
+				Indirizzo indirizzo = daoIndirizzo.ottieniIndirizzo(codiceIndirizzo);
+				loggedUser = new Utente(nome, cognome, email, password, numeroTelefono, indirizzo);
+			}
+		}
+		return loggedUser;
+	}
+	
+	public boolean cambiaPassword(String email, String newPassword) {
+		boolean updateSucced = false;
+		String query = "UPDATE utente SET password = ? WHERE email = ?";
+		try {
+			Connection connection = DBconnection.getInstance().getConn();
+			PreparedStatement stmt = connection.prepareStatement(query);
+			stmt.setString(1, newPassword);
+			stmt.setString(2, email);
+			updateSucced = stmt.execute();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		return updateSucced;
+	}
+	
+	public boolean cambiaIndirizzo(String email, int newCodiceIndirizzo) {
+		boolean updateSucced = false;
+		String query = "UPDATE utente SET codiceIndirizzo = ? WHERE email = ?";
+		try {
+			Connection connection = DBconnection.getInstance().getConn();
+			PreparedStatement stmt = connection.prepareStatement(query);
+			stmt.setInt(1, newCodiceIndirizzo);
+			stmt.setString(2, email);
+			updateSucced = stmt.execute();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		return updateSucced;
+	}
+	
 }
