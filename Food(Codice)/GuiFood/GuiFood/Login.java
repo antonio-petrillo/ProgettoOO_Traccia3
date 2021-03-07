@@ -26,10 +26,12 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 	private static final long serialVersionUID = 1L;
 	private JPasswordField textField_Password;
 	private JTextField textField_Email;
-    private  String PasswordDimenticata_cmd = "Hai dimenticato la password?";
-    private  String Registrati_cmd = "Registrati!";
     private Controller ctrl;
- 
+    
+    private JButton Button_Accedi;
+    private JButton Button_Registrazione;
+    private JButton Button_HaiDimenticatoLaPassword;
+
 	public Login(Controller ctrl) {
 		setTitle("Login");
 		this.getContentPane().setBackground(new Color(255, 165, 0));
@@ -104,7 +106,7 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 		separator_password.setBounds(593, 254, 138, 12);
 		this.getContentPane().add(separator_password);
 		
-		JButton Button_Accedi = new JButton("Accedi!");
+		Button_Accedi = new JButton("Accedi!");
 		Button_Accedi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		Button_Accedi.setFocusable(false);
 		Button_Accedi.setForeground(new  Color(255, 165, 0));
@@ -112,28 +114,26 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 		this.getContentPane().add(Button_Accedi);
 		Button_Accedi.addActionListener(this);
 
-		JButton Button_HaiDimenticatoLaPassword = new JButton("Hai dimenticato la password?");
+		Button_HaiDimenticatoLaPassword = new JButton("Hai dimenticato la password?");
 		Button_HaiDimenticatoLaPassword.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		Button_HaiDimenticatoLaPassword.setBorder(null);
 		Button_HaiDimenticatoLaPassword.setForeground(Color.WHITE);
 		Button_HaiDimenticatoLaPassword.setBounds(583, 313, 158, 29);
 		this.getContentPane().add(Button_HaiDimenticatoLaPassword);
 		Button_HaiDimenticatoLaPassword.addActionListener(this);
-		Button_HaiDimenticatoLaPassword.setActionCommand(PasswordDimenticata_cmd);
 
 		JSeparator separator_HaiDimenticatoLaPassword = new JSeparator();
 		separator_HaiDimenticatoLaPassword.setForeground(new Color(255, 255, 255));
 		separator_HaiDimenticatoLaPassword.setBounds(583, 330, 158, 12);
 		this.getContentPane().add(separator_HaiDimenticatoLaPassword);
 		
-		JButton Button_Registrazione = new JButton("Registrati!");
+		Button_Registrazione = new JButton("Registrati!");
 		Button_Registrazione.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		Button_Registrazione.setFocusable(false);
         Button_Registrazione.setForeground(new  Color(255, 165, 0));
 		Button_Registrazione.setBounds(583, 354, 158, 29);
 		this.getContentPane().add(Button_Registrazione);
 		Button_Registrazione.addActionListener(this);
-		Button_Registrazione.setActionCommand(Registrati_cmd);
 	
 	    JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 581, 482);
@@ -149,20 +149,18 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-			if(e.getActionCommand().equals(PasswordDimenticata_cmd))
+			if(e.getSource().equals(Button_HaiDimenticatoLaPassword))
 			{
 				ctrl.visualizzazionePwdDimenticata();
 			}
-			else if(e.getActionCommand().equals(Registrati_cmd))
+			else if(e.getSource().equals(Button_Registrazione))
 			{
 				ctrl.visualizzazioneRegistrazione();
 			}
-				else
+			else if(e.getSource().equals(Button_Accedi))
 			{
 				String password=new String(textField_Password.getPassword());
-				// TODO : effettua accesso
-//				ctrl.effettuaAccesso(new Utente(textField_Email.getText(),password));
-				ctrl.visualizzazioneMenu();
+				ctrl.effettuaAccesso(textField_Email.getText(), password);
 			}
 
      }

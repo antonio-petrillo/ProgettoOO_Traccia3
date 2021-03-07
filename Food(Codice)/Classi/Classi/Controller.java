@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import Dao.*;
 import GuiFood.*;
@@ -19,15 +21,12 @@ public class Controller {
 	private Password_Dimenticata passwordDimenticata;
 	private VisualizzazioneAvvisi dialogErrore;
 	private ModificaProfilo modificaProfilo;
-	private Filtri filtri;
 	private Riders sceltaRider;
 	private Fattura fattura;
     private Menu menu;
-    private Utente utente;
 
+    private Utente utenteLoggato;
     private ArrayList<Ristorante> ristoranti;
-    private ArrayList<Prodotto> prodotti;
-    private ArrayList<Rider> riders;
     
 	public Controller() {
 		login = new Login(this);
@@ -86,13 +85,6 @@ public class Controller {
 		fattura.setLocationRelativeTo(menu);
 	}
 	
-	public void Filtri(String cibo)
-	{
-		filtri=new Filtri(this, cibo);
-		filtri.setVisible(true);;
-		filtri.setLocationRelativeTo(menu);
-	}
-	
 	public void ModificaProfilo() 
 	    {
 		 modificaProfilo = new ModificaProfilo(this);
@@ -119,10 +111,8 @@ public class Controller {
 			ImageIcon scaledImageIcon = new ImageIcon(scaledImage);
 			return scaledImageIcon;
 		}
-	  /////////////////////////////
 	  
 	  public boolean effettuaRegistrazione(String nome, String cognome, String email, String password,  String numeroTelefono, 
-				// TODO : aggiungere le chiamate a visualizza errore
 				String nomeVia, int numeroCivico, String cap, String citta, String provincia) {
 			DaoUtente daoUtente = new DaoUtenteDatabase();
 			DaoIndirizzo daoIndirizzo = new DaoIndirizzoDatabase();
@@ -140,14 +130,54 @@ public class Controller {
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (SQLException e) {
+				this.VisualizzazioneAvvisi("Impossibile registrarsi al momento, problema interno");
 				e.printStackTrace();
 			}
 			return insertSucced;
 		} 
 	  
-	  public boolean costruisciDominio() {
-		 return false; 
+	  public void effettuaAccesso(String email, String password) {
+		  DaoUtente daoUtente = new DaoUtenteDatabase();
+		  if(daoUtente.concediAccesso(email, password)) {
+			  try {
+				  this.utenteLoggato = daoUtente.effettuaAccesso(email, password);
+				  DaoRistorante daoRistoranti = new DaoRistoranteDatabase();
+				  this.ristoranti = daoRistoranti.ottieniRistorante();
+				  this.visualizzazioneMenu();
+			  }catch(SQLException | ClassNotFoundException e) {
+				 this.VisualizzazioneAvvisi("Impossibile connettersi, problema interno"); 
+			  }
+		  }else {
+			  this.VisualizzazioneAvvisi("Credenziali errate");
+		  }
 	  }
 	  
+	 public void cambiaPassword(String email, String nuovaPassword) {
+		 
+	 }
+	 
+	public boolean isLoggato() {
+		return this.utenteLoggato != null;
+	}
 
+	public String getEmail() {
+		return this.utenteLoggato.getEmail();
+	}
+
+	public ArrayList<Prodotto> ottieniProdottiFiltro(String tipoOCategoria) {
+		return new DaoProdottoDatabase().filtraProdottti(tipoOCategoria);
+	}
+
+	public ArrayList<Prodotto> ottieniProdottiFasciaDiPrezzo(int min, int max) {
+		return new DaoProdottoDatabase().filtraProdottiPerPrezzo(min, max);
+	}
+
+	public ArrayList<Prodotto> ottieniProdottiFiltroRider(String tipoVeicolo) {
+		return new DaoProdottoDatabase().filtroRider(tipoVeicolo);
+	}
+	
+	public ArrayList<Prodotto> ottieniProdottiPerMenu(String filtroPrezzo, String filtroVeicolo, String tipoOCategoria){
+		return new DaoProdottoDatabase().ottieniProdottiFiltrati(filtroPrezzo, filtroVeicolo, tipoOCategoria);
+	}
+	 
 }

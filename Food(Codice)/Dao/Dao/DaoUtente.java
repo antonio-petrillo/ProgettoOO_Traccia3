@@ -14,4 +14,7 @@ public interface DaoUtente {
 	public boolean cambiaPassword(String email, String newPassword); 
 	
 	public boolean cambiaIndirizzo(String email, int newCodiceIndirizzo); 
+
+	public Utente effettuaAccesso(String email, String password) throws SQLException, ClassNotFoundException;
+	
 }

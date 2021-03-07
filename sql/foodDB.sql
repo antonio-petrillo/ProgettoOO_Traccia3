@@ -50,11 +50,12 @@ CREATE TABLE prodotto(
 );
 
 CREATE TABLE fornitura(
-    quantitaProdotto INTEGER CHECK (IS NOT NULL AND quantitaProdotto > 0),
+    quantitaProdotto INTEGER NOT NULL CHECK (quantitaProdotto > 0),
     codiceSeriale SERIAL ,
     codiceRistorante SERIAL ,
     PRIMARY KEY (codiceSeriale, codiceRistorante),
-    FOREIGN KEY fk_prodotto(codiceSeriale) REFERENCES prodotto(codiceSeriale)
+    CONSTRAINT fk_prodotto
+    FOREIGN KEY (codiceSeriale) REFERENCES prodotto(codiceSeriale)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
@@ -96,8 +97,8 @@ CREATE TABLE corrierePer(
 
 CREATE TABLE carrello(
     data DATE NOT NULL,
-    codiceCarrello SERIAL PRIMARY KEY,
-    ); 
+    codiceCarrello SERIAL PRIMARY KEY
+); 
 
 CREATE TABLE composizioneCarrello(
     codiceCarrello SERIAL,
@@ -131,3 +132,15 @@ CREATE TABLE ordine(
     ON UPDATE CASCADE
     ON DELETE CASCADE
 );
+
+CREATE VIEW riderView AS 
+SELECT R.codiceRider, V.tipoVeicolo
+FROM rider AS R NATURAL JOIN veicolo AS V;
+
+CREATE VIEW riderProdottoView AS 
+SELECT codiceRider, codiceSeriale
+FROM corrierePer NATURAL JOIN fornitura;
+
+CREATE VIEW prodottoVeicoloView AS
+SELECT P.nome, P.prezzo, P.codiceSeriale, P.scadenza, P.pathFoto, P.tipoProdotto, P.categoria, tipoVeicolo
+FROM prodotto AS P NATURAL JOIN riderProdottoView NATURAL JOIN riderView;

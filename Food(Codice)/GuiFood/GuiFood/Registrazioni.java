@@ -367,15 +367,32 @@ public  class Registrazioni extends JDialog implements ActionListener{
 		Button_Iscriviti.setForeground(new  Color(255, 165, 0));
 		textField_Iscrizione.add(Button_Iscriviti);
 		Button_Iscriviti.addActionListener(this);
-//		Button_Iscriviti.setActionCommand(Iscriviti_cmd);
-				
 	}
 
 	 //TODO: RIVEDERE MEGLIO
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(Button_Iscriviti)) {
-			
+			String nome=textField_Nome.getText();
+			String cognome=textField_Cognome.getText();
+			String email=textField_Email.getText();
+			String numeroTelefonico=textField_NumTelefonico.getText();
+			String password=textField_Password.getText();
+			String provincia=textField_Provincia.getText();
+			String citta=textField_Città.getText();
+			String Cap=textField_Cap.getText();
+			String nomeVia=textField_NomeVia.getText();
+			int numCivico;
+			try {
+				numCivico=Integer.parseInt(textField_N_Civico.getText().toString());
+			    if(ctrl.effettuaRegistrazione(nome, cognome, email, password,  numeroTelefonico, nomeVia, numCivico, Cap, citta, provincia)==false) {
+				      ctrl.VisualizzazioneAvvisi("Utente già presente");
+			    }  else {
+			    	  ctrl.visualizzazioneMenu();
+			     }
+			 } catch (NumberFormatException ae){
+			      ctrl.VisualizzazioneAvvisi("Il formato di numero civico non è corretto");
+			 }	
 		}
 	}
 }

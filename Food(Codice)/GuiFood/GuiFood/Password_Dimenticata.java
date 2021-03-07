@@ -29,6 +29,8 @@ public class Password_Dimenticata extends JDialog implements ActionListener,Mous
 	private JPasswordField textField_Password;
 	private Controller ctrl;
 
+	private JButton cambiaButton; 
+
 	public Password_Dimenticata(Controller ctrl) {
 		setResizable(false);
 		setTitle("Password Dimenticata");
@@ -39,6 +41,11 @@ public class Password_Dimenticata extends JDialog implements ActionListener,Mous
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		this.ctrl = ctrl;
+		
+		if(ctrl.isLoggato()) {
+			textField_Email.setText(ctrl.getEmail());
+			textField_Email.setEditable(false);
+		}
 		
 		JLabel Label_DimenticaPwd = new JLabel("Hai dimenticato la Password?");
 		Label_DimenticaPwd.setFont(new Font("Lucida Grande", Font.BOLD, 23));
@@ -114,24 +121,20 @@ public class Password_Dimenticata extends JDialog implements ActionListener,Mous
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
-		JButton ResetButton = new JButton("Reset");
-		ResetButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		ResetButton.setForeground(new  Color(255, 165, 0));
-		ResetButton.setActionCommand("Reset");
-        buttonPane.add(ResetButton);
-        ResetButton.addActionListener(this);
+		cambiaButton = new JButton("cambia password");
+		cambiaButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		cambiaButton.setForeground(new  Color(255, 165, 0));
+        buttonPane.add(cambiaButton);
+        cambiaButton.addActionListener(this);
 		
 	}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			boolean check_nome = ctrl.controllaCaratteriNonAmmessi(textField_Email.getText());
-			if(check_nome) {
-				// TODO : controlla
-	//			ctrl.resetPassword(new Utente(textField_Email.getText()),textField_Password.getPassword());
+			if(e.getSource().equals(cambiaButton)) {
+				ctrl.cambiaPassword(textField_Email.getText(),textField_Password.getText());
 			}
-			else
-				ctrl.VisualizzazioneAvvisi("ERRORE : il campo nome contiene uno dei seguenti caratteri : [* , / -] . Ometterli.");
+
 		}
 
 		@Override

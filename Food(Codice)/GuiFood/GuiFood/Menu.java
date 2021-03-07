@@ -16,15 +16,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.JTextField;
 
 import Classi.Controller;
+import Classi.Prodotto;
 
 import javax.swing.JSeparator;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
+import javax.swing.JComboBox;
 import javax.swing.JMenuBar;
 import java.awt.FlowLayout;
 import java.awt.Cursor;
@@ -38,8 +40,6 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
     private  String Filtri_cmd = "Filtri";
   
     private Controller ctrl;
-    
-    private JTextField textField_CosaPreferisciMangiare;
     private JPanel panelContent2;
     private JPanel panelContent1;
     private JPanel container;
@@ -54,6 +54,25 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 	private JPanel panelContent5;
 	private JPanel panelContent6;
 
+	ArrayList<Prodotto> prodotti;
+	
+	private final JLabel lbl_Prezzo_1 = new JLabel("prezzo");
+
+	private String[] prezzo = {
+			     "qualunque",
+			     "0-5 €",
+			     "5-10 €",
+			     "10-20 €",
+			     "20-75 €" };
+	
+	private  String[] MezziTrasporto = {
+			 "qualunque",
+			 "moto",
+		     "bicicletta"};	
+
+	private JComboBox comboBox_prezzo;
+	private JComboBox comboBox_MezzoTrasporto;
+
     public Menu(Controller ctrl) {
         setTitle("Menù");
         this.getContentPane().setBackground(new Color(255, 165, 0));
@@ -62,6 +81,8 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setLayout(null);
         this.ctrl=ctrl;
+        
+        this.prodotti = ctrl.ottieniProdottiPerMenu("qualunque", "qualunque", "antipasti");
             
         JPanel panel_1 = new JPanel();
         panel_1.setBackground(new Color(255, 165, 0));
@@ -139,43 +160,6 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         panelText.setBounds(0, 0, 560, 51);
         panelMenu.add(panelText);
         panelText.setLayout(null);
-        
-        JSeparator separator_Ricerca = new JSeparator();
-        separator_Ricerca.setForeground(Color.WHITE);
-        separator_Ricerca.setBounds(6, 33, 248, 12);
-        panelText.add(separator_Ricerca);
-        
-        textField_CosaPreferisciMangiare = new JTextField();
-        textField_CosaPreferisciMangiare.setText("Cosa preferisci mangiare?");
-        textField_CosaPreferisciMangiare.setSelectionColor(null);
-        textField_CosaPreferisciMangiare.setForeground(Color.BLACK);
-        textField_CosaPreferisciMangiare.setFont(new Font("Times New Roman", Font.ITALIC, 14));
-        textField_CosaPreferisciMangiare.setDisabledTextColor(Color.LIGHT_GRAY);
-        textField_CosaPreferisciMangiare.setColumns(10);
-        textField_CosaPreferisciMangiare.setBorder(null);
-        textField_CosaPreferisciMangiare.setBackground(new Color(255, 140, 0));
-        textField_CosaPreferisciMangiare.setBounds(6, 6, 248, 28);
-        panelText.add(textField_CosaPreferisciMangiare);
-        textField_CosaPreferisciMangiare.addMouseListener((MouseListener) this);
-
-        
-        JButton btnCerca = new JButton("Cerca");
-        btnCerca.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnCerca.setForeground(new Color(255, 140, 0));
-        btnCerca.setFocusable(false);
-		btnCerca.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./ricerca.png")), 10, 10));
-        btnCerca.setBounds(253, 6, 79, 25);
-        panelText.add(btnCerca);
-        
-        JButton btnFiltri = new JButton("Filtri");
-        btnFiltri.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btnFiltri.setForeground(new Color(255, 140, 0));
-        btnFiltri.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-        btnFiltri.setFocusable(false);
-		btnFiltri.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./filtri.png")), 21, 21));
-        btnFiltri.setActionCommand("Filtri");
-        btnFiltri.setBounds(446, 6, 108, 25);
-        panelText.add(btnFiltri);
         
         JPanel panelBtn = new JPanel();
         panelBtn.setBackground(new Color(255, 140, 0));
@@ -291,15 +275,30 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
           
+        JLabel lbl_Prezzo = new JLabel("prezzo");
+        lbl_Prezzo.setForeground(Color.WHITE);
+        lbl_Prezzo.setBounds(6, 18, 48, 16);
+        panelText.add(lbl_Prezzo);
+        
+        comboBox_prezzo = new JComboBox(prezzo);
+        comboBox_prezzo.setBounds(50, 14, 127, 27);
+        comboBox_prezzo.setVisible(true);
+        panelText.add(comboBox_prezzo);
+        
+        JLabel lblMezzoDiTrasporto = new JLabel("mezzo di trasporto");
+        lblMezzoDiTrasporto.setForeground(Color.WHITE);
+        lblMezzoDiTrasporto.setBounds(189, 14, 143, 29);
+        panelText.add(lblMezzoDiTrasporto);
+        
+        comboBox_MezzoTrasporto = new JComboBox(MezziTrasporto);
+        comboBox_MezzoTrasporto.setBounds(315, 14, 143, 27);
+        comboBox_MezzoTrasporto.setVisible(true);
+        panelText.add(comboBox_MezzoTrasporto); 
+        
     }
     
      public void actionPerformed(ActionEvent e) {
-    	  if(e.getActionCommand().equals(Filtri_cmd))
-			{
-				 // ctrl.Filtri(inserire stringa);
-			}
-    	  
-			else if(e.getActionCommand().equals(Acquista_cmd))
+			if(e.getActionCommand().equals(Acquista_cmd))
 			{
 				ctrl.visualizzazioneFattura(); 
 			}
@@ -313,60 +312,31 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 		    	     ctrl.visualizzazioneLogin(); 	
 	           }
 		       
-		    } else if(e.getSource( ) == antipasti) {
-            	container.remove(panelContent2);
-            	container.remove(panelContent3);
-            	container.remove(panelContent4);
-            	container.remove(panelContent5);
-            	container.remove(panelContent6);
-                container.add(panelContent1);
-            	container.add(panelContent2);
-            } else if(e.getSource() == primi) {
-            	container.remove(panelContent1);
-                container.remove(panelContent6);
-                container.remove(panelContent4);
-                container.remove(panelContent5);
-                container.add(panelContent2); 
-                container.add(panelContent3);
-             } else if(e.getSource() == secondi) { 
-           	    container.remove(panelContent2);
-           	    container.remove(panelContent4);
-           	    container.remove(panelContent5);
-           	    container.remove(panelContent6);
-                container.add(panelContent3);
-                container.add(panelContent1);
-             } else if(e.getSource() == contorni) {
-                container.remove(panelContent2);
-                container.remove(panelContent6);
-                container.remove(panelContent1);
-            	container.remove(panelContent3);
-                container.remove(panelContent5);
-                container.add(panelContent4);
-                container.add(panelContent3);
-              }else if(e.getSource() == dolci) {
-           	    container.remove(panelContent4);
-           	    container.remove(panelContent2);
-                container.remove(panelContent6);
-                container.remove(panelContent3);
-                container.add(panelContent5);
-                container.add(panelContent4);
-                container.add(panelContent6);
-                container.add(panelContent1);
-              }else if(e.getSource() == bevande) {
-                container.remove(panelContent4);
-                container.remove(panelContent1);
-                container.remove(panelContent5);
-                container.remove(panelContent2);
-                container.remove(panelContent3);
-              	container.add(panelContent6);
-               }   
-               container.revalidate();
-               container.repaint();             
-            }
+		    } else if(e.getSource( ).equals(antipasti) ) {
+		    	panelContent1.removeAll();
+		    	this.prodotti = ctrl.ottieniProdottiFiltro("antipasti");
+            } else if(e.getSource().equals(primi)) {
+		    	panelContent1.removeAll();
+		    	this.prodotti = ctrl.ottieniProdottiFiltro("primi");
+            } else if(e.getSource().equals(secondi)) { 
+		    	panelContent1.removeAll();
+		    	this.prodotti = ctrl.ottieniProdottiFiltro("secondi");
+            } else if(e.getSource().equals(contorni)) {
+		    	panelContent1.removeAll();
+		    	this.prodotti = ctrl.ottieniProdottiFiltro("contorni");
+            } else if(e.getSource().equals(dolci)) {
+		    	panelContent1.removeAll();
+		    	this.prodotti = ctrl.ottieniProdottiFiltro("dolci");
+            } else if(e.getSource().equals(dolci)) {
+		    	panelContent1.removeAll();
+		    	this.prodotti = ctrl.ottieniProdottiFiltro("bevanda");
+            }   
+            container.revalidate();
+            container.repaint();             
+    }
           
     @Override
     public void mouseClicked(MouseEvent e) {
-    	textField_CosaPreferisciMangiare.setText("");  
     }
 
     @Override
@@ -388,7 +358,6 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
     public void mouseExited(MouseEvent e) {
         
     }
-
 }
 
    
