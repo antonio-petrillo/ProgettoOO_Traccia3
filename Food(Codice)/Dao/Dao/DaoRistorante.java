@@ -6,8 +6,11 @@ import Classi.Ristorante;
 
 public interface DaoRistorante {
 
-	public ArrayList<Ristorante> ottieniRistorante();
+	public Ristorante[] ottieniRistoranti();
+
+	public Ristorante ottieniRistorante(int codiceRistorante);
 
 	public boolean aggiornaForniture(int codiceRistorante, int codiceProdotto, int nuovaQuantita); 
+
 	
 }

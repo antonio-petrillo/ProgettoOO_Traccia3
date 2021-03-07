@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,9 +25,12 @@ public class Controller {
 	private Riders sceltaRider;
 	private Fattura fattura;
     private Menu menu;
+    private SceltaRistorante sceltaRistorante;
 
     private Utente utenteLoggato;
-    private ArrayList<Ristorante> ristoranti;
+    private Ristorante ristorante;
+    private Rider rider;
+    private Carrello carrello;
     
 	public Controller() {
 		login = new Login(this);
@@ -48,13 +52,8 @@ public class Controller {
 	 }
    
 	 public void visualizzazioneMenu() {
-   	 if(menu==null)
-   		{
-   			menu = new Menu(this);
-   			menu.setLocationRelativeTo(null);
-   			login.dispose();
-   			login.setVisible(false);
-   		}
+   		menu = new Menu(this);
+   		menu.setLocationRelativeTo(null);
     	menu.setVisible(true);	
     }
 	  
@@ -84,6 +83,12 @@ public class Controller {
 		fattura.setVisible(true);
 		fattura.setLocationRelativeTo(menu);
 	}
+	
+	public void VisualizzaSceltaRistorante() {
+	    sceltaRistorante = new SceltaRistorante(this);
+	    sceltaRistorante.setVisible(true);
+	    sceltaRistorante.setLocationRelativeTo(menu);
+ }
 	
 	public void ModificaProfilo() 
 	    {
@@ -142,18 +147,30 @@ public class Controller {
 			  try {
 				  this.utenteLoggato = daoUtente.effettuaAccesso(email, password);
 				  DaoRistorante daoRistoranti = new DaoRistoranteDatabase();
-				  this.ristoranti = daoRistoranti.ottieniRistorante();
-				  this.visualizzazioneMenu();
+				  Ristorante[] ristoranti = daoRistoranti.ottieniRistoranti();
+				  int length = ristoranti.length;
+				  String [] nomeRistoranti = new String[length];
+				  for (int i = 0; i<length; i++) {
+					 nomeRistoranti[i] = ristoranti[i].getNome(); 
+				  }
+				  //
+
+				  
+				  // collega scelta ristoranti
+				  this.ristorante = null;
+				  this.VisualizzaSceltaRistorante();
 			  }catch(SQLException | ClassNotFoundException e) {
 				 this.VisualizzazioneAvvisi("Impossibile connettersi, problema interno"); 
+				 this.visualizzazioneLogin();
 			  }
 		  }else {
 			  this.VisualizzazioneAvvisi("Credenziali errate");
+			  this.visualizzazioneLogin();
 		  }
 	  }
 	  
 	 public void cambiaPassword(String email, String nuovaPassword) {
-		 
+		new DaoUtenteDatabase().cambiaPassword(email, nuovaPassword); 
 	 }
 	 
 	public boolean isLoggato() {
@@ -164,20 +181,76 @@ public class Controller {
 		return this.utenteLoggato.getEmail();
 	}
 
-	public ArrayList<Prodotto> ottieniProdottiFiltro(String tipoOCategoria) {
-		return new DaoProdottoDatabase().filtraProdottti(tipoOCategoria);
-	}
-
-	public ArrayList<Prodotto> ottieniProdottiFasciaDiPrezzo(int min, int max) {
-		return new DaoProdottoDatabase().filtraProdottiPerPrezzo(min, max);
-	}
-
-	public ArrayList<Prodotto> ottieniProdottiFiltroRider(String tipoVeicolo) {
-		return new DaoProdottoDatabase().filtroRider(tipoVeicolo);
+	public ArrayList<Prodotto> ottieniProdotti(){
+		ArrayList<Prodotto> ret = new ArrayList<Prodotto>();
+		HashMap<Prodotto, Integer> map = (HashMap<Prodotto, Integer>) this.ristorante.getQuantitaProdotto().clone();
+		for(Prodotto p : map.keySet()) {
+			ret.add(p);
+		}
+		return ret;
 	}
 	
-	public ArrayList<Prodotto> ottieniProdottiPerMenu(String filtroPrezzo, String filtroVeicolo, String tipoOCategoria){
-		return new DaoProdottoDatabase().ottieniProdottiFiltrati(filtroPrezzo, filtroVeicolo, tipoOCategoria);
+	public ArrayList<Prodotto> ottieniProdottiFiltro(String categoria) {
+		ArrayList<Prodotto> ret = new ArrayList<Prodotto>();
+		HashMap<Prodotto, Integer> map = (HashMap<Prodotto, Integer>) this.ristorante.getQuantitaProdotto().clone();
+		for(Prodotto p : map.keySet()) {
+			if(p.getDescrizione().equals(categoria)) {
+				ret.add(p);
+			}
+		}
+		return ret;
+	}
+	
+	public ArrayList<Prodotto> filtraPrezzo(ArrayList<Prodotto> prodotti, String fasciaDiPrezzo){
+		double min = -1;
+		double max = Double.MAX_VALUE;
+		if(!fasciaDiPrezzo.equals("qualunque")) {
+			if(fasciaDiPrezzo.equals("0-5 €")) {
+				min = 0;
+				max = 5;
+			}else if(fasciaDiPrezzo.equals("5-10 €")) {
+				min = 5;
+				max = 10;
+			}else if(fasciaDiPrezzo.equals("10-20 €")) {
+				min = 10;
+				max = 20;
+			}else {// 20-75
+				min = 20;
+				max = 75;
+			}
+		}
+		for(Prodotto p : prodotti) { 
+			if(p.getPrezzo() < min || p.getPrezzo() > max) {
+				prodotti.remove(p);
+			}
+		}
+		return prodotti;
+	}
+
+
+	public Rider[] getRiders() {
+		int size = this.ristorante.getRiders().size();
+		Rider [] riders = new Rider[size];
+		for(int i = 0; i < size; i++) {
+			riders[i] = this.ristorante.getRiders().get(i);
+		}
+		return riders;
+	}
+
+	public void setRider(Rider rider) {
+		this.rider = rider;
+	}
+
+	public Ristorante[] ottieniRistoranti() {
+		return new DaoRistoranteDatabase().ottieniRistoranti();
+	}
+	
+	public void setRistorante(int codiceRistorante) {
+		this.ristorante = new DaoRistoranteDatabase().ottieniRistorante(codiceRistorante);
+	}
+
+	public void aggiungiAlCarrello(Prodotto prodottoSelezionato) {
+		this.carrello.aggiungiProdotto(prodottoSelezionato, 1);
 	}
 	 
 }

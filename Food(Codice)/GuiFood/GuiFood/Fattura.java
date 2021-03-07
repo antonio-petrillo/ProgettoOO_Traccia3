@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import Classi.Controller;
 import Classi.Ordine;
 import Classi.Rider;
+
 import javax.swing.JComboBox;
 import java.awt.Cursor;
 
@@ -27,13 +28,14 @@ public class Fattura extends JFrame implements ActionListener {
     private JTextField textField_Telefono;
     private JTextField textField_CAP;
     private JTextField textField_IndirizzoEmail;
-    private JTextField textField_Riders;
     private String Indietro_cmd = "Indietro";  
     private String ScegliRiders_cmd = "Scegli riders";
     private String Annulla_cmd = "Annulla";
     private String EffettuaOrdine_cmd = "Effettua Ordine";
     private Controller ctrl;
 
+    private JComboBox<Rider> comboBox_Riders;
+    
 	public Fattura(Controller ctrl){
 
 		setResizable(false);
@@ -243,49 +245,10 @@ public class Fattura extends JFrame implements ActionListener {
 		textField_IndirizzoEmail.setBounds(26, 310, 168, 18);
 		getContentPane().add(textField_IndirizzoEmail);
 		
-		JLabel label_ristorante = new JLabel("Ristorante");
-		label_ristorante.setForeground(Color.WHITE);
-		label_ristorante.setBounds(6, 351, 108, 16);
-		getContentPane().add(label_ristorante);
-		
-		JComboBox comboBox_Ristoranti = new JComboBox(); //popolare tramite DB
-		comboBox_Ristoranti.setBounds(6, 379, 199, 16);
-		getContentPane().add(comboBox_Ristoranti);
-		
 		JLabel label_riders = new JLabel("Riders");
 		label_riders.setForeground(Color.WHITE);
-		label_riders.setBounds(6, 407, 49, 16);
+		label_riders.setBounds(6, 359, 49, 16);
 		getContentPane().add(label_riders);
-
-		JLabel lblconaRiders = new JLabel("");
-		lblconaRiders.setBounds(6, 427, 21, 33);
-		lblconaRiders.setIcon(ctrl.scaleImageIcon(new ImageIcon(Ordine.class.getResource("/Fattura./utente.png")), 15, 15));
-		getContentPane().add(lblconaRiders);
-		
-		JSeparator separator_Riders = new JSeparator();
-		separator_Riders.setForeground(Color.WHITE);
-		separator_Riders.setBounds(6, 448, 199, 12);
-		getContentPane().add(separator_Riders);
-		
-		textField_Riders = new JTextField();
-		textField_Riders.setSelectionColor(Color.LIGHT_GRAY);
-		textField_Riders.setForeground(Color.BLACK);
-		textField_Riders.setFont(new Font("Times New Roman", Font.ITALIC, 14));
-		textField_Riders.setDisabledTextColor(Color.LIGHT_GRAY);
-		textField_Riders.setColumns(10);
-		textField_Riders.setBorder(null);
-		textField_Riders.setBackground(new Color(255, 165, 0));
-		textField_Riders.setBounds(26, 433, 178, 18);
-		getContentPane().add(textField_Riders);
-	
-		JButton btnScegliRiders = new JButton("Scegli riders");
-		btnScegliRiders.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnScegliRiders.setForeground(new  Color(255, 165, 0));
-		btnScegliRiders.setBounds(260, 422, 126, 38);
-		btnScegliRiders.setIcon(ctrl.scaleImageIcon(new ImageIcon(Rider.class.getResource("/Fattura./persona.png")), 25, 25));
-		this.getContentPane().add(btnScegliRiders);
-		btnScegliRiders.addActionListener(this);
-		btnScegliRiders.setActionCommand(ScegliRiders_cmd);
 			
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 140, 0));
@@ -346,21 +309,24 @@ public class Fattura extends JFrame implements ActionListener {
 		panel.add(btnAnnulla);
 		btnAnnulla.addActionListener(this);
 		btnAnnulla.setActionCommand(Annulla_cmd);
+		
+		comboBox_Riders = new JComboBox<Rider>(ctrl.getRiders());
+		comboBox_Riders.setBounds(3, 387, 199, 27);
+		getContentPane().add(comboBox_Riders);
 
 	}
 
 	public void actionPerformed(ActionEvent e) {
-	    if(e.getActionCommand().equals(ScegliRiders_cmd))
-	    {
-			ctrl.visualizzazioneSceltaRider();				
-	    }
-	    else if(e.getActionCommand().equals(Annulla_cmd))
+	    if(e.getActionCommand().equals(Annulla_cmd))
 		{
 		    ctrl.visualizzazioneMenu();
 		}
 		else if(e.getActionCommand().equals(EffettuaOrdine_cmd))
 		{
-				  JOptionPane.showMessageDialog(null, "Ordine effettuato con successo");
+			// dao --> ordine
+			ctrl.setRider((Rider) comboBox_Riders.getSelectedItem());
+			JOptionPane.showMessageDialog(null, "Ordine effettuato con successo");
+			ctrl.visualizzazioneMenu();
 	    }
 		else if(e.getActionCommand().equals(Indietro_cmd))
 		{
@@ -369,4 +335,5 @@ public class Fattura extends JFrame implements ActionListener {
      }
 	
 }
+	
 	

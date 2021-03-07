@@ -20,7 +20,7 @@ public class DaoVeicoloDatabase implements DaoVeicolo{
 			ResultSet rs = stmt.executeQuery();
 			while(rs.next()) {
 				String tipoVeicolo = rs.getString("tipoVeicolo");
-				int codiceSeriale = rs.getInt("codiceRider");
+				int codiceSeriale = rs.getInt("codiceSeriale");
 				if(tipoVeicolo.equals("Moto")) {
 					parcoVeicoli.add(new Moto(codiceSeriale));
 				}else {

@@ -3,8 +3,9 @@ package GuiFood;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
+import javax.swing.JScrollPane;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -17,6 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JTextField;
 
@@ -41,7 +43,7 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
   
     private Controller ctrl;
     private JPanel panelContent2;
-    private JPanel panelContent1;
+    private JScrollPane panelContent1;
     private JPanel container;
 	private JButton antipasti;
 	private JButton primi;
@@ -54,9 +56,7 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 	private JPanel panelContent5;
 	private JPanel panelContent6;
 
-	ArrayList<Prodotto> prodotti;
 	
-	private final JLabel lbl_Prezzo_1 = new JLabel("prezzo");
 
 	private String[] prezzo = {
 			     "qualunque",
@@ -72,6 +72,10 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 
 	private JComboBox comboBox_prezzo;
 	private JComboBox comboBox_MezzoTrasporto;
+	private String[] listaProdotti;
+	private ArrayList<Prodotto> prodotti = new ArrayList<Prodotto> ();
+
+	private JList listaGui;
 
     public Menu(Controller ctrl) {
         setTitle("Menù");
@@ -81,8 +85,26 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setLayout(null);
         this.ctrl=ctrl;
+
         
-        this.prodotti = ctrl.ottieniProdottiPerMenu("qualunque", "qualunque", "antipasti");
+        this.setVisible(true);
+
+        ///////////////
+
+        prodotti = ctrl.ottieniProdotti();
+        int size = prodotti.size();
+        listaProdotti = new String[size];
+        for (int i=0; i<size; i++) {
+        	listaProdotti[i] = prodotti.get(i).getNome();
+         }
+        listaGui = new JList<>(listaProdotti);
+        listaGui.addMouseListener(this);
+        
+        panelContent1.add(listaGui);
+        getContentPane().add(panelContent1);
+        
+        ///////////////
+
             
         JPanel panel_1 = new JPanel();
         panel_1.setBackground(new Color(255, 165, 0));
@@ -233,9 +255,8 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         globalContainer.add(container);
         
         JLabel lbl1 = new JLabel("PANEL 1");
-        panelContent1 = new JPanel();
+        panelContent1 = new JScrollPane();
         panelContent1.setBackground(Color.CYAN);
-        panelContent1.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
         panelContent1.add(lbl1);
        
         JLabel lbl2 = new JLabel("PANEL 2");
@@ -315,21 +336,27 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 		    } else if(e.getSource( ).equals(antipasti) ) {
 		    	panelContent1.removeAll();
 		    	this.prodotti = ctrl.ottieniProdottiFiltro("antipasti");
+		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
             } else if(e.getSource().equals(primi)) {
 		    	panelContent1.removeAll();
 		    	this.prodotti = ctrl.ottieniProdottiFiltro("primi");
+		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
             } else if(e.getSource().equals(secondi)) { 
 		    	panelContent1.removeAll();
 		    	this.prodotti = ctrl.ottieniProdottiFiltro("secondi");
+		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
             } else if(e.getSource().equals(contorni)) {
 		    	panelContent1.removeAll();
 		    	this.prodotti = ctrl.ottieniProdottiFiltro("contorni");
+		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
             } else if(e.getSource().equals(dolci)) {
 		    	panelContent1.removeAll();
 		    	this.prodotti = ctrl.ottieniProdottiFiltro("dolci");
+		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
             } else if(e.getSource().equals(dolci)) {
 		    	panelContent1.removeAll();
 		    	this.prodotti = ctrl.ottieniProdottiFiltro("bevanda");
+		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
             }   
             container.revalidate();
             container.repaint();             
@@ -337,6 +364,15 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
           
     @Override
     public void mouseClicked(MouseEvent e) {
+    	if(e.getSource().equals(listaGui)) {
+    		JList<String> list =(JList) e.getSource();
+    		if(e.getClickCount() > 1) {
+    			int index = list.locationToIndex(e.getPoint());
+    			if (index >= 0) {
+    				ctrl.aggiungiAlCarrello(this.prodotti.get(index));
+    			}
+    		}
+    	}
     }
 
     @Override

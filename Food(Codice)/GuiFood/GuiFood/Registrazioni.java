@@ -28,7 +28,6 @@ public  class Registrazioni extends JDialog implements ActionListener{
 	private JTextField textField_Cognome;
 	private JTextField textField_Email;
 	private JTextField textField_NumTelefonico;
-	private JTextField textField_DataNascita;
 	private JTextField textField_Provincia;
 	private JTextField textField_Città;
 	private JTextField textField_Cap;
@@ -172,46 +171,20 @@ public  class Registrazioni extends JDialog implements ActionListener{
 		textField_NumTelefonico.setBounds(166, 141, 321, 19);
 		textField_Iscrizione.add(textField_NumTelefonico);
 			
-		JLabel Label_DataNascita = new JLabel("Data Nascita");
-		Label_DataNascita.setForeground(Color.WHITE);
-		Label_DataNascita.setBounds(52, 169, 85, 21);
-		textField_Iscrizione.add(Label_DataNascita);
-			
-		JLabel lbIconaNascita = new JLabel("");
-		lbIconaNascita.setBounds(139, 165, 15, 16);
-		lbIconaNascita.setIcon(ctrl.scaleImageIcon(new ImageIcon(Registrazioni.class.getResource("/Iscrizione./compleanno.png")), 15, 15));
-		textField_Iscrizione.add(lbIconaNascita);
-			
-		JSeparator separator_DataNascita = new JSeparator();
-		separator_DataNascita.setForeground(Color.WHITE);
-		separator_DataNascita.setBounds(139, 181, 348, 12);
-		textField_Iscrizione.add(separator_DataNascita);
-			
-		textField_DataNascita = new JTextField();
-		textField_DataNascita.setText("");
-		textField_DataNascita.setSelectionColor(Color.LIGHT_GRAY);
-		textField_DataNascita.setForeground(Color.BLACK);
-		textField_DataNascita.setFont(new Font("Times New Roman", Font.ITALIC, 14));
-		textField_DataNascita.setDisabledTextColor(Color.BLACK);
-		textField_DataNascita.setColumns(10);
-		textField_DataNascita.setBorder(null);
-		textField_DataNascita.setBackground(new Color(255, 165, 0));
-		textField_DataNascita.setBounds(166, 167, 321, 21);
-		textField_Iscrizione.add(textField_DataNascita);
 		
 		JLabel Label_Password = new JLabel("Password");
 		Label_Password.setForeground(Color.WHITE);
-		Label_Password.setBounds(66, 192, 61, 29);
+		Label_Password.setBounds(66, 181, 61, 29);
 		textField_Iscrizione.add(Label_Password);
 		
 		JLabel lbIconaPassword = new JLabel("");
-		lbIconaPassword.setBounds(139, 192, 15, 16);
+		lbIconaPassword.setBounds(139, 181, 15, 16);
 		lbIconaPassword.setIcon(ctrl.scaleImageIcon(new ImageIcon(Registrazioni.class.getResource("/Iscrizione./Password.png")), 15, 15));
 		textField_Iscrizione.add(lbIconaPassword);
 		
 		JSeparator separator_Password = new JSeparator();
 		separator_Password.setForeground(Color.WHITE);
-		separator_Password.setBounds(139, 209, 348, 12);
+		separator_Password.setBounds(139, 192, 348, 12);
 		textField_Iscrizione.add(separator_Password);
 		
 		textField_Password = new JTextField();
@@ -223,7 +196,7 @@ public  class Registrazioni extends JDialog implements ActionListener{
 		textField_Password.setColumns(10);
 		textField_Password.setBorder(null);
 		textField_Password.setBackground(new Color(255, 165, 0));
-		textField_Password.setBounds(166, 193, 321, 21);
+		textField_Password.setBounds(149, 181, 321, 21);
 		textField_Iscrizione.add(textField_Password);
 		
 		JLabel Label_Provincia = new JLabel("Provincia");
@@ -388,7 +361,7 @@ public  class Registrazioni extends JDialog implements ActionListener{
 			    if(ctrl.effettuaRegistrazione(nome, cognome, email, password,  numeroTelefonico, nomeVia, numCivico, Cap, citta, provincia)==false) {
 				      ctrl.VisualizzazioneAvvisi("Utente già presente");
 			    }  else {
-			    	  ctrl.visualizzazioneMenu();
+			    	  ctrl.visualizzazioneLogin();
 			     }
 			 } catch (NumberFormatException ae){
 			      ctrl.VisualizzazioneAvvisi("Il formato di numero civico non è corretto");

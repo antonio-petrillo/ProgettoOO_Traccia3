@@ -109,7 +109,6 @@ public class Password_Dimenticata extends JDialog implements ActionListener,Mous
 
 			}
 		});
-	    textField_Password.setText("123456789");
 	    textField_Password.setForeground(Color.BLACK);
 	    textField_Password.setBorder(null);
 	    textField_Password.setBackground(new Color(255, 165, 0));
@@ -132,6 +131,7 @@ public class Password_Dimenticata extends JDialog implements ActionListener,Mous
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource().equals(cambiaButton)) {
+				this.dispose();
 				ctrl.cambiaPassword(textField_Email.getText(),textField_Password.getText());
 			}
 

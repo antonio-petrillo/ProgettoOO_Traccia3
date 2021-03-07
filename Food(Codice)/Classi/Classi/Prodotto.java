@@ -19,6 +19,10 @@ public class Prodotto {
 		return codiceSeriale;
 	}
 
+	public String getPathFoto() {
+		return pathFoto;
+	}
+
 	private String descrizione;
 	private Date scadenzaProdotto;
 	private ImageIcon fotoProdotto = null;

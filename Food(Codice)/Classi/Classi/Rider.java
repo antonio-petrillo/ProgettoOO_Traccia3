@@ -30,7 +30,9 @@ public class Rider {
 	}
 	
 	public void addRistoranteAssociato(Ristorante ristorante) {
-		this.ristoranteAssociato[indexRistoranteAssociato++] = ristorante;
+		if(indexRistoranteAssociato < 3) {
+			this.ristoranteAssociato[indexRistoranteAssociato++] = ristorante;
+		}
 	}
 
 }

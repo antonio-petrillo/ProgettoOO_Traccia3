@@ -160,6 +160,7 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 			else if(e.getSource().equals(Button_Accedi))
 			{
 				String password=new String(textField_Password.getPassword());
+				this.dispose();
 				ctrl.effettuaAccesso(textField_Email.getText(), password);
 			}
 

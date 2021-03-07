@@ -43,4 +43,16 @@ public class Ristorante {
 		return riders;
 	}
 
+	public HashMap<Prodotto, Integer> getQuantitaProdotto() {
+		return quantitaProdotto;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setRiders(ArrayList<Rider> riders) {
+		this.riders = riders;
+	}
+
 }

@@ -1,5 +1,10 @@
 package Dao;
 
-public interface DaoOrdine {
+import Classi.Carrello;
+import Classi.Rider;
+import Classi.Ristorante;
+import Classi.Utente;
 
+public interface DaoOrdine {
+	public boolean inserisciNuovoOrdine(Utente utente, Carrello carrello, Ristorante ristorante, Rider rider);
 }
