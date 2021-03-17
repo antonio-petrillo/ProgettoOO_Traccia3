@@ -22,7 +22,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.Cursor;
 
-public class Password_Dimenticata extends JDialog implements ActionListener,MouseListener {
+public class Password_Dimenticata extends JDialog implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField_Email;
@@ -102,13 +102,6 @@ public class Password_Dimenticata extends JDialog implements ActionListener,Mous
 		contentPanel.add(lblIconaNuovaPassword);
 		
 		textField_Password = new JPasswordField();
-		textField_Password.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				textField_Password.setText("");
-
-			}
-		});
 	    textField_Password.setForeground(Color.BLACK);
 	    textField_Password.setBorder(null);
 	    textField_Password.setBackground(new Color(255, 165, 0));
@@ -137,28 +130,4 @@ public class Password_Dimenticata extends JDialog implements ActionListener,Mous
 
 		}
 
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			textField_Email.setText(""); 
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
 }

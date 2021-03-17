@@ -34,9 +34,7 @@ public class Fattura extends JFrame implements ActionListener {
     private String EffettuaOrdine_cmd = "Effettua Ordine";
     private Controller ctrl;
 
-    private JComboBox<Rider> comboBox_Riders;
-    
-	public Fattura(Controller ctrl){
+    private JComboBox<Rider> comboBox_Riders; public Fattura(Controller ctrl){
 
 		setResizable(false);
 		setTitle("Dettagli fattura");
@@ -310,7 +308,7 @@ public class Fattura extends JFrame implements ActionListener {
 		btnAnnulla.addActionListener(this);
 		btnAnnulla.setActionCommand(Annulla_cmd);
 		
-		comboBox_Riders = new JComboBox<Rider>(ctrl.getRiders());
+		//comboBox_Riders = new JComboBox<Rider>(ctrl.getRiders());
 		comboBox_Riders.setBounds(3, 387, 199, 27);
 		getContentPane().add(comboBox_Riders);
 
@@ -324,7 +322,7 @@ public class Fattura extends JFrame implements ActionListener {
 		else if(e.getActionCommand().equals(EffettuaOrdine_cmd))
 		{
 			// dao --> ordine
-			ctrl.setRider((Rider) comboBox_Riders.getSelectedItem());
+//			ctrl.setRider((Rider) comboBox_Riders.getSelectedItem());
 			JOptionPane.showMessageDialog(null, "Ordine effettuato con successo");
 			ctrl.visualizzazioneMenu();
 	    }

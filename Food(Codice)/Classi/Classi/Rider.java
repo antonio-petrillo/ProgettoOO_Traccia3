@@ -30,7 +30,7 @@ public class Rider {
 	}
 	
 	public void addRistoranteAssociato(Ristorante ristorante) {
-		if(indexRistoranteAssociato < 3) {
+		if(!this.ristoranteAssociato[0].equals(ristorante) && !this.ristoranteAssociato[1].equals(ristorante) && !this.ristoranteAssociato[2].equals(ristorante)) {
 			this.ristoranteAssociato[indexRistoranteAssociato++] = ristorante;
 		}
 	}

@@ -114,10 +114,10 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 		this.getContentPane().add(Button_Accedi);
 		Button_Accedi.addActionListener(this);
 
-		Button_HaiDimenticatoLaPassword = new JButton("Hai dimenticato la password?");
+		Button_HaiDimenticatoLaPassword = new JButton("Password dimenticata?");
 		Button_HaiDimenticatoLaPassword.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		Button_HaiDimenticatoLaPassword.setBorder(null);
-		Button_HaiDimenticatoLaPassword.setForeground(Color.WHITE);
+		Button_HaiDimenticatoLaPassword.setForeground(Color.BLACK);
 		Button_HaiDimenticatoLaPassword.setBounds(583, 313, 158, 29);
 		this.getContentPane().add(Button_HaiDimenticatoLaPassword);
 		Button_HaiDimenticatoLaPassword.addActionListener(this);
@@ -155,13 +155,20 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 			}
 			else if(e.getSource().equals(Button_Registrazione))
 			{
+				this.setVisible(false);
 				ctrl.visualizzazioneRegistrazione();
 			}
 			else if(e.getSource().equals(Button_Accedi))
 			{
 				String password=new String(textField_Password.getPassword());
-				this.dispose();
-				ctrl.effettuaAccesso(textField_Email.getText(), password);
+				if(!password.equals("")) {
+					this.dispose();
+					if(ctrl.effettuaAccesso(textField_Email.getText(), password)) {
+						ctrl.VisualizzaSceltaRistorante();
+					}
+				}else {
+					ctrl.VisualizzazioneAvvisi("Inserisci le tue credenziali");
+				}
 			}
 
      }
@@ -219,7 +226,6 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
 			
 		}
      

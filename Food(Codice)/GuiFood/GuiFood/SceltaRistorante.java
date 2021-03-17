@@ -52,16 +52,16 @@ public class SceltaRistorante extends JFrame implements ActionListener {
 			lbl_sceltaRistorante.setBackground(new Color(255, 255, 255));
 			lbl_sceltaRistorante.setBounds(26, 69, 277, 16);
 			contentPanel.add(lbl_sceltaRistorante);
-		}
+		
 		{
-			ristoranti = ctrl.ottieniRistoranti();
-			String[] nomiRistoranti = new String[ristoranti.length];
-			for(int i =0 ; i<ristoranti.length; i++) {
-				nomiRistoranti[i] = ristoranti[i].getNome();
-			}
-			comboBox_sceltaRistorante = new JComboBox(nomiRistoranti);
-			comboBox_sceltaRistorante.setBounds(16, 85, 369, 27);
-			contentPanel.add(comboBox_sceltaRistorante);
+			//ristoranti = ctrl.ottieniRistoranti();
+			//String[] nomiRistoranti = new String[ristoranti.length];
+			//for(int i =0 ; i<ristoranti.length; i++) {
+			//	nomiRistoranti[i] = ristoranti[i].getNome();
+		}
+			//comboBox_sceltaRistorante = new JComboBox(nomiRistoranti);
+			//comboBox_sceltaRistorante.setBounds(16, 85, 369, 27);
+			//contentPanel.add(comboBox_sceltaRistorante);
 		}
 		{
 			btn_SceltaRistorante = new JButton("Cerca");
@@ -84,7 +84,7 @@ public class SceltaRistorante extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(btn_SceltaRistorante)){
-			ctrl.setRistorante(this.ristoranti[comboBox_sceltaRistorante.getSelectedIndex()].getCodiceRistorante());
+			//ctrl.setRistorante(this.ristoranti[comboBox_sceltaRistorante.getSelectedIndex()].getCodiceRistorante());
 			this.dispose();
 			ctrl.visualizzazioneMenu();
 		}else if(e.getSource().equals(Indietro_cmd)){

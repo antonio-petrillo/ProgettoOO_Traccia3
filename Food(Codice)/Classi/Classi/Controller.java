@@ -32,6 +32,7 @@ public class Controller {
     private Rider rider;
     private Carrello carrello;
     
+    // TODO : aggiungi i vari '.dispose()'
 	public Controller() {
 		login = new Login(this);
 		login.setVisible(true);
@@ -40,7 +41,9 @@ public class Controller {
 	}
 
 	 public void visualizzazioneLogin() {
-		 loginApp = new Login(this);
+		 if(loginApp == null) {
+			 loginApp = new Login(this);
+		 }
 		 loginApp.setVisible(true);
 		 loginApp.setLocationRelativeTo(login);
 	   }
@@ -123,50 +126,32 @@ public class Controller {
 			DaoIndirizzo daoIndirizzo = new DaoIndirizzoDatabase();
 			boolean insertSucced = false;
 			int codiceIndirizzo = -1;
-			try {
-				if(! daoUtente.esisteUtente(email)) {
-					if(! daoIndirizzo.esisteIndirizzo(nomeVia, numeroCivico, cap, citta, provincia)) {
-						daoIndirizzo.inserisciNuovoIndirizzo(nomeVia, numeroCivico, cap, citta, provincia);
-					}
-					codiceIndirizzo = daoIndirizzo.ottieniCodiceIndirizzo(nomeVia, numeroCivico, cap, citta, provincia);
-					daoUtente.inserisciNuovoUtente(nome, cognome, email, password, numeroTelefono, codiceIndirizzo);
-					insertSucced = true;
+			if(! daoUtente.esisteUtente(email)) {
+				if(! daoIndirizzo.esisteIndirizzo(nomeVia, numeroCivico, cap, citta, provincia)) {
+					daoIndirizzo.inserisciNuovoIndirizzo(nomeVia, numeroCivico, cap, citta, provincia);
 				}
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				this.VisualizzazioneAvvisi("Impossibile registrarsi al momento, problema interno");
-				e.printStackTrace();
+				codiceIndirizzo = daoIndirizzo.ottieniCodiceIndirizzo(nomeVia, numeroCivico, cap, citta, provincia);
+				if (codiceIndirizzo != -1) {
+					insertSucced = daoUtente.inserisciNuovoUtente(nome, cognome, email, password, numeroTelefono, codiceIndirizzo);
+				}
 			}
 			return insertSucced;
 		} 
 	  
-	  public void effettuaAccesso(String email, String password) {
+	  public boolean effettuaAccesso(String email, String password) {
+		  boolean loginSucced = false;
 		  DaoUtente daoUtente = new DaoUtenteDatabase();
 		  if(daoUtente.concediAccesso(email, password)) {
-			  try {
-				  this.utenteLoggato = daoUtente.effettuaAccesso(email, password);
-				  DaoRistorante daoRistoranti = new DaoRistoranteDatabase();
-				  Ristorante[] ristoranti = daoRistoranti.ottieniRistoranti();
-				  int length = ristoranti.length;
-				  String [] nomeRistoranti = new String[length];
-				  for (int i = 0; i<length; i++) {
-					 nomeRistoranti[i] = ristoranti[i].getNome(); 
-				  }
-				  //
-
-				  
-				  // collega scelta ristoranti
-				  this.ristorante = null;
-				  this.VisualizzaSceltaRistorante();
-			  }catch(SQLException | ClassNotFoundException e) {
-				 this.VisualizzazioneAvvisi("Impossibile connettersi, problema interno"); 
-				 this.visualizzazioneLogin();
+			  this.utenteLoggato = daoUtente.effettuaAccesso(email, password);
+			  if(this.utenteLoggato == null) {
+				  this.VisualizzazioneAvvisi("Impossibile accedere, problema interno");
 			  }
+			  loginSucced = true;
 		  }else {
 			  this.VisualizzazioneAvvisi("Credenziali errate");
 			  this.visualizzazioneLogin();
 		  }
+		  return loginSucced;
 	  }
 	  
 	 public void cambiaPassword(String email, String nuovaPassword) {
@@ -181,76 +166,14 @@ public class Controller {
 		return this.utenteLoggato.getEmail();
 	}
 
-	public ArrayList<Prodotto> ottieniProdotti(){
-		ArrayList<Prodotto> ret = new ArrayList<Prodotto>();
-		HashMap<Prodotto, Integer> map = (HashMap<Prodotto, Integer>) this.ristorante.getQuantitaProdotto().clone();
-		for(Prodotto p : map.keySet()) {
-			ret.add(p);
-		}
-		return ret;
-	}
-	
-	public ArrayList<Prodotto> ottieniProdottiFiltro(String categoria) {
-		ArrayList<Prodotto> ret = new ArrayList<Prodotto>();
-		HashMap<Prodotto, Integer> map = (HashMap<Prodotto, Integer>) this.ristorante.getQuantitaProdotto().clone();
-		for(Prodotto p : map.keySet()) {
-			if(p.getDescrizione().equals(categoria)) {
-				ret.add(p);
-			}
-		}
-		return ret;
-	}
-	
-	public ArrayList<Prodotto> filtraPrezzo(ArrayList<Prodotto> prodotti, String fasciaDiPrezzo){
-		double min = -1;
-		double max = Double.MAX_VALUE;
-		if(!fasciaDiPrezzo.equals("qualunque")) {
-			if(fasciaDiPrezzo.equals("0-5 €")) {
-				min = 0;
-				max = 5;
-			}else if(fasciaDiPrezzo.equals("5-10 €")) {
-				min = 5;
-				max = 10;
-			}else if(fasciaDiPrezzo.equals("10-20 €")) {
-				min = 10;
-				max = 20;
-			}else {// 20-75
-				min = 20;
-				max = 75;
-			}
-		}
-		for(Prodotto p : prodotti) { 
-			if(p.getPrezzo() < min || p.getPrezzo() > max) {
-				prodotti.remove(p);
-			}
-		}
-		return prodotti;
-	}
-
-
-	public Rider[] getRiders() {
-		int size = this.ristorante.getRiders().size();
-		Rider [] riders = new Rider[size];
-		for(int i = 0; i < size; i++) {
-			riders[i] = this.ristorante.getRiders().get(i);
-		}
-		return riders;
-	}
-
-	public void setRider(Rider rider) {
-		this.rider = rider;
-	}
-
 	public Ristorante[] ottieniRistoranti() {
-		return new DaoRistoranteDatabase().ottieniRistoranti();
-	}
-	
-	public void setRistorante(int codiceRistorante) {
-		this.ristorante = new DaoRistoranteDatabase().ottieniRistorante(codiceRistorante);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public void aggiungiAlCarrello(Prodotto prodottoSelezionato) {
-		this.carrello.aggiungiProdotto(prodottoSelezionato, 1);
+	public ArrayList<Prodotto> ottieniProdotti() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-	 
+
 }

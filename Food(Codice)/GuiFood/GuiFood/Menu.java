@@ -36,14 +36,9 @@ import java.awt.Cursor;
 public class Menu extends JFrame implements ActionListener,MouseListener {
     private static final long serialVersionUID = 1L;
     protected JFrame frame1;
-    private  String Acquista_cmd = "Acquista";
-    private  String ModificaProfilo_cmd = "Modifica Profilo";
-    private  String Uscire_cmd = "Uscire";
-    private  String Filtri_cmd = "Filtri";
   
     private Controller ctrl;
-    private JPanel panelContent2;
-    private JScrollPane panelContent1;
+    private JScrollPane panelContent1; // cambia nome al panel dei prodotti
     private JPanel container;
 	private JButton antipasti;
 	private JButton primi;
@@ -51,12 +46,6 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 	private JButton contorni;
 	private JButton dolci;
 	private JButton bevande;
-	private JPanel panelContent3;
-	private JPanel panelContent4;
-	private JPanel panelContent5;
-	private JPanel panelContent6;
-
-	
 
 	private String[] prezzo = {
 			     "qualunque",
@@ -106,6 +95,7 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         ///////////////
 
             
+        // TODO : porta la definizione dei bottoni fuori dal costruttore
         JPanel panel_1 = new JPanel();
         panel_1.setBackground(new Color(255, 165, 0));
         panel_1.setBounds(559, 0, 188, 481);
@@ -133,7 +123,6 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         panel_1.add(completeOrder);
 		completeOrder.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./carrello.png")), 25, 25));
         completeOrder.addActionListener(this);
-        completeOrder.setActionCommand(Acquista_cmd);
         
         JPanel panel_servizi = new JPanel();
         panel_servizi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -157,14 +146,12 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         Servizi.add(ModificaProfilo);
 		ModificaProfilo.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Modifica.png")), 20, 20));
         ModificaProfilo.addActionListener(this);
-        ModificaProfilo.setActionCommand(ModificaProfilo_cmd);
         
         JMenuItem Uscire = new JMenuItem("Uscire");
         Uscire.setForeground(new Color(255, 140, 0));
         Servizi.add(Uscire);
 		Uscire.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Uscire.png")), 25, 25));
         Uscire.addActionListener(this);
-        Uscire.setActionCommand(Uscire_cmd);
                 
         JPanel globalContainer = new JPanel();
         globalContainer.setBounds(0, 0, 560, 481);
@@ -254,41 +241,6 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         container.setBounds(0, 111, 560, 370);
         globalContainer.add(container);
         
-        JLabel lbl1 = new JLabel("PANEL 1");
-        panelContent1 = new JScrollPane();
-        panelContent1.setBackground(Color.CYAN);
-        panelContent1.add(lbl1);
-       
-        JLabel lbl2 = new JLabel("PANEL 2");
-        panelContent2 = new JPanel();
-        panelContent2.setBackground(Color.ORANGE);
-        panelContent2.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
-        panelContent2.add(lbl2);
-       
-        JLabel lbl3 = new JLabel("PANEL 3");
-        panelContent3 = new JPanel();
-        panelContent3.setBackground(Color.CYAN);
-        panelContent3.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
-        panelContent3.add(lbl3);
-        
-        JLabel lbl4 = new JLabel("PANEL 4");
-        panelContent4 = new JPanel();
-        panelContent4.setBackground(Color.ORANGE);
-        panelContent4.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
-        panelContent4.add(lbl4);
-        
-        JLabel lbl5 = new JLabel("PANEL 5");
-        panelContent5 = new JPanel();
-        panelContent5.setBackground(Color.CYAN);
-        panelContent5.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
-        panelContent5.add(lbl5);
-        
-        JLabel lbl6 = new JLabel("PANEL 6");
-        panelContent6 = new JPanel();
-        panelContent6.setBackground(Color.ORANGE);
-        panelContent6.setLayout(new FlowLayout(FlowLayout.CENTER, 255, 175));
-        panelContent6.add(lbl6);
-      
         container.add(panelContent1);
        
         globalContainer.add(panelMenu, BorderLayout.NORTH);
@@ -318,61 +270,12 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         
     }
     
-     public void actionPerformed(ActionEvent e) {
-			if(e.getActionCommand().equals(Acquista_cmd))
-			{
-				ctrl.visualizzazioneFattura(); 
-			}
-			else if(e.getActionCommand().equals(ModificaProfilo_cmd)) 
-			{
-				  ctrl.ModificaProfilo(); 
-			}
-		    else if(e.getActionCommand().equals(Uscire_cmd)) 	
-		    {
-		       if(JOptionPane.showConfirmDialog(null,"sicuro di voler uscire?")==0) {
-		    	     ctrl.visualizzazioneLogin(); 	
-	           }
-		       
-		    } else if(e.getSource( ).equals(antipasti) ) {
-		    	panelContent1.removeAll();
-		    	this.prodotti = ctrl.ottieniProdottiFiltro("antipasti");
-		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
-            } else if(e.getSource().equals(primi)) {
-		    	panelContent1.removeAll();
-		    	this.prodotti = ctrl.ottieniProdottiFiltro("primi");
-		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
-            } else if(e.getSource().equals(secondi)) { 
-		    	panelContent1.removeAll();
-		    	this.prodotti = ctrl.ottieniProdottiFiltro("secondi");
-		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
-            } else if(e.getSource().equals(contorni)) {
-		    	panelContent1.removeAll();
-		    	this.prodotti = ctrl.ottieniProdottiFiltro("contorni");
-		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
-            } else if(e.getSource().equals(dolci)) {
-		    	panelContent1.removeAll();
-		    	this.prodotti = ctrl.ottieniProdottiFiltro("dolci");
-		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
-            } else if(e.getSource().equals(dolci)) {
-		    	panelContent1.removeAll();
-		    	this.prodotti = ctrl.ottieniProdottiFiltro("bevanda");
-		    	this.prodotti = ctrl.filtraPrezzo(this.prodotti, prezzo[comboBox_prezzo.getSelectedIndex()]);
-            }   
-            container.revalidate();
-            container.repaint();             
+    public void actionPerformed(ActionEvent e) {
     }
+
           
     @Override
     public void mouseClicked(MouseEvent e) {
-    	if(e.getSource().equals(listaGui)) {
-    		JList<String> list =(JList) e.getSource();
-    		if(e.getClickCount() > 1) {
-    			int index = list.locationToIndex(e.getPoint());
-    			if (index >= 0) {
-    				ctrl.aggiungiAlCarrello(this.prodotti.get(index));
-    			}
-    		}
-    	}
     }
 
     @Override

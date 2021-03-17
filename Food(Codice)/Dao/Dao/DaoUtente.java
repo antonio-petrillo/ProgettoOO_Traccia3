@@ -5,7 +5,7 @@ import Classi.Utente;
 
 public interface DaoUtente {
 
-	public boolean esisteUtente(String email) throws SQLException, ClassNotFoundException;	
+	public boolean esisteUtente(String email);	
 	
 	public boolean concediAccesso(String email, String password); 	
 
@@ -15,6 +15,6 @@ public interface DaoUtente {
 	
 	public boolean cambiaIndirizzo(String email, int newCodiceIndirizzo); 
 
-	public Utente effettuaAccesso(String email, String password) throws SQLException, ClassNotFoundException;
+	public Utente effettuaAccesso(String email, String password);
 	
 }

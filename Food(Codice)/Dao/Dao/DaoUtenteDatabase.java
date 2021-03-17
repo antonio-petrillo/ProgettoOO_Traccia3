@@ -10,14 +10,18 @@ public class DaoUtenteDatabase implements DaoUtente {
 
 	// TODO : query per ottener un utente
 	
-	public boolean esisteUtente(String email) throws SQLException, ClassNotFoundException{
+	public boolean esisteUtente(String email){
 		boolean userExist = false;
 		String query = "SELECT * FROM utente AS U WHERE U.email=?";
-		Connection connection = DBconnection.getInstance().getConn();
-		PreparedStatement stmt = connection.prepareStatement(query);
-		stmt.setString(1, email);
-		ResultSet rs = stmt.executeQuery();
-		userExist = rs.next();
+		try {
+			Connection connection = DBconnection.getInstance().getConn();
+			PreparedStatement stmt = connection.prepareStatement(query);
+			stmt.setString(1, email);
+			ResultSet rs = stmt.executeQuery();
+			userExist = rs.next();
+		}catch(SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 		return userExist;
 	}
 	
@@ -62,23 +66,33 @@ public class DaoUtenteDatabase implements DaoUtente {
 		return insertSucced;
 	}
 	
-	public Utente effettuaAccesso(String email, String password) throws SQLException, ClassNotFoundException {
+	public Utente effettuaAccesso(String email, String password){
 		Utente loggedUser = null;
-		String query = "SELECT * FROM utente";
+		String query = "SELECT * FROM utente WHERE email=? AND password=?";
 		DaoIndirizzo daoIndirizzo = new DaoIndirizzoDatabase();
-		if(esisteUtente(email) && concediAccesso(email, password)) {
-			Connection connection = DBconnection.getInstance().getConn();
-			PreparedStatement stmt = connection.prepareStatement(query);
-			ResultSet rs = stmt.executeQuery();
-			while(rs.next()) {
-				String nome = rs.getString("nome");
-				String cognome = rs.getString("cognome");
-				// email e password li ho gia (in realta' in utente non si dovrebbe inserire il campo password)
-				String numeroTelefono = rs.getString("numeroTelefono");
-				int codiceIndirizzo = rs.getInt("codiceIndirizzo");
-				Indirizzo indirizzo = daoIndirizzo.ottieniIndirizzo(codiceIndirizzo);
-				loggedUser = new Utente(nome, cognome, email, password, numeroTelefono, indirizzo);
+		try {
+			if(esisteUtente(email) && concediAccesso(email, password)) {
+				Connection connection = DBconnection.getInstance().getConn();
+				PreparedStatement stmt = connection.prepareStatement(query);
+				stmt.setString(1, email);
+				stmt.setString(2, password);
+				ResultSet rs = stmt.executeQuery();
+				while(rs.next()) {
+					String nome = rs.getString("nome");
+					String cognome = rs.getString("cognome");
+					// email e password li ho gia (in realta' in utente non si dovrebbe inserire il campo password)
+					String numeroTelefono = rs.getString("numeroTelefono");
+					int codiceIndirizzo = rs.getInt("codiceIndirizzo");
+					Indirizzo indirizzo = daoIndirizzo.ottieniIndirizzo(codiceIndirizzo);
+					loggedUser = new Utente(nome, cognome, email, password, numeroTelefono, indirizzo);
+				}
+				if(loggedUser == null) {
+					System.out.println("cred errate");
+				}
 			}
+		}catch(SQLException | ClassNotFoundException e){
+			e.printStackTrace();
+			loggedUser = null;
 		}
 		return loggedUser;
 	}
