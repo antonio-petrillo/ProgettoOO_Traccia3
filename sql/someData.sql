@@ -44,15 +44,15 @@ INSERT INTO prodotto(nome, prezzo, scadenza, pathFoto, tipoProdotto, categoria) 
 ('monti', 6.50, '2021-03-17', '/', 'cibo', 'antipasti'), 
 ('mare-monti', 10.00, '2021-03-14', '/', 'cibo', 'antipasti'),
 ('vegano', 6.00, '2021-06-25', '/', 'cibo', 'antipasti'),
-('acqua', 1.00, '2028-01-01', '/', 'bevanda', 'analcolico'),
-('coca', 2.00, '2022-09-20', '/', 'bevanda', 'analcolico'),
-('aranciata', 2.00, '2022-10-27', '/', 'bevanda', 'analcolico'),
-('gassosa', 2.00, '2022-08-14', '/', 'bevanda', 'analcolico'),
-('succo-frutta', 2.50, '2021-05-20', '/', 'bevanda', 'analcolico'),
-('birra', 1.50, '2021-12-25', '/', 'bevanda', 'alcolico'),
-('vino-rosso', 2.50, '2021-09-25', '/', 'bevanda', 'alcolico'),
-('vino-bianco', 3.50, '2021-07-10', '/', 'bevanda', 'alcolico'),
-('mojito', 4.00, '2021-11-03', '/', 'bevanda', 'alcolico');
+('acqua', 1.00, '2028-01-01', '/', 'bevanda', 'bevande'),
+('coca', 2.00, '2022-09-20', '/', 'bevanda', 'bevande'),
+('aranciata', 2.00, '2022-10-27', '/', 'bevanda', 'bevande'),
+('gassosa', 2.00, '2022-08-14', '/', 'bevanda', 'bevande'),
+('succo-frutta', 2.50, '2021-05-20', '/', 'bevanda', 'bevande'),
+('birra', 1.50, '2021-12-25', '/', 'bevanda', 'bevande'),
+('vino-rosso', 2.50, '2021-09-25', '/', 'bevanda', 'bevande'),
+('vino-bianco', 3.50, '2021-07-10', '/', 'bevanda', 'bevande'),
+('mojito', 4.00, '2021-11-03', '/', 'bevanda', 'bevande');
 
 INSERT INTO ristorante(nome, descrizione, numeroTelefono, codiceIndirizzo) VALUES
 ('gnab-gib', 'ristorante al termine dell`universo', '0001112229', 7),
