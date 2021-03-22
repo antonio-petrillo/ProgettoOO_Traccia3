@@ -205,9 +205,6 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         Label_scegliProdotto.setBounds(28, 33, 109, 16);
         panel_prodotti.add(Label_scegliProdotto);
 
-        /////////////////////////////////////////////////////////////////
-        /////// Non ci si capisce nulla in questo costruttore ///////////
-        /////////////////////////////////////////////////////////////////
 
 	this.quantitaProdotto = (HashMap<Prodotto, Integer>) ctrl.getProdottiDalRistoranteSelezionato().clone();
 	int length = quantitaProdotto.size();
