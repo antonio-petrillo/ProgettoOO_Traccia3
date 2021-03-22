@@ -3,9 +3,7 @@ package GuiFood;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -19,139 +17,79 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 
-import javax.swing.JTextField;
-
+import Classi.Bevanda;
 import Classi.Controller;
 import Classi.Prodotto;
 
 import javax.swing.JSeparator;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JMenuBar;
-import java.awt.FlowLayout;
 import java.awt.Cursor;
 
 public class Menu extends JFrame implements ActionListener,MouseListener {
-    private static final long serialVersionUID = 1L;
-    protected JFrame frame1;
-  
-    private Controller ctrl;
-    private JScrollPane panelContent1; // cambia nome al panel dei prodotti
-    private JPanel container;
-	private JButton antipasti;
-	private JButton primi;
-	private JButton secondi;
-	private JButton contorni;
-	private JButton dolci;
-	private JButton bevande;
-
-	private String[] prezzo = {
-			     "qualunque",
-			     "0-5 €",
-			     "5-10 €",
-			     "10-20 €",
-			     "20-75 €" };
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
-	private  String[] MezziTrasporto = {
-			 "qualunque",
-			 "moto",
-		     "bicicletta"};	
+    private JPanel container;
+	
+    private JButton buttonQualunque;
+    private JButton Button_antipasti;
+	private JButton Button_primi;
+	private JButton Button_secondi;
+	private JButton Button_contorni;
+	private JButton Button_dolci;
+	private JButton Button_bevande;
+	// perche' fare un panel, se poi nel costruttore se ne utilizza un altro
+	private JPanel panel_prodotti;
 
-	private JComboBox comboBox_prezzo;
-	private JComboBox comboBox_MezzoTrasporto;
-	private String[] listaProdotti;
-	private ArrayList<Prodotto> prodotti = new ArrayList<Prodotto> ();
+	
+	private JButton btnConcludiOrdine;
+	private JButton Button_aggiungiOrdine;
+	private JMenuItem Button_modificaProfilo;
+	private JMenuItem Button_uscire;
 
-	private JList listaGui;
+    private Controller ctrl;
 
-    public Menu(Controller ctrl) {
+
+	private JComboBox comboBoxFiltroPrezzo;
+	private JComboBox<String> comboBox_quantità;
+// perche' creare una variabile che termina con un accento?
+// a che serve una combobox per scegliere il prezzo?
+//	private JComboBox comboBox_scegliPrezzo = new JComboBox();
+	private JComboBox<String> comboBox_scegliProdotto;
+	
+	private HashMap<Prodotto, Integer> quantitaProdotto;
+	
+	private String[][] nomiProdottoCategoria = new String[7][];
+	private int category = 0;
+	private Prodotto[][] prodottoCategoria = new Prodotto[7][];
+	
+	private String[] prezzo = {
+		     "qualunque",
+		     "0-5 €",
+		     "5-10 €",
+		     "10-20 €",
+		     "20-75 €" };
+
+	public Menu(Controller ctrl) {
         setTitle("Menù");
-        this.getContentPane().setBackground(new Color(255, 165, 0));
+        this.getContentPane().setBackground(new Color(255, 140, 0));
         this.setResizable(false);
-        this.setBounds(100, 100, 747, 504);
+        this.setBounds(100, 100, 678, 504);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setLayout(null);
         this.ctrl=ctrl;
-
+        
         
         this.setVisible(true);
-
-        ///////////////
-
-        prodotti = ctrl.ottieniProdotti();
-        int size = prodotti.size();
-        listaProdotti = new String[size];
-        for (int i=0; i<size; i++) {
-        	listaProdotti[i] = prodotti.get(i).getNome();
-         }
-        listaGui = new JList<>(listaProdotti);
-        listaGui.addMouseListener(this);
-        
-        panelContent1.add(listaGui);
-        getContentPane().add(panelContent1);
-        
-        ///////////////
-
-            
-        // TODO : porta la definizione dei bottoni fuori dal costruttore
-        JPanel panel_1 = new JPanel();
-        panel_1.setBackground(new Color(255, 165, 0));
-        panel_1.setBounds(559, 0, 188, 481);
-        getContentPane().add(panel_1);
-        panel_1.setLayout(null);
-        
-        JLabel username = new JLabel("Nickname Utente");
-        username.setBounds(0, 22, 138, 16);
-        panel_1.add(username);
-        
-        JSeparator separator_1 = new JSeparator();
-        separator_1.setForeground(Color.WHITE);
-        separator_1.setBounds(0, 34, 188, 12);
-        panel_1.add(separator_1);
-
-        JSeparator separator_2 = new JSeparator();
-        separator_2.setForeground(Color.WHITE);
-        separator_2.setBounds(0, 436, 188, 12);
-        panel_1.add(separator_2);
-        
-        JButton completeOrder = new JButton("Acquista");
-        completeOrder.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        completeOrder.setForeground(new Color(255, 140, 0));
-        completeOrder.setBounds(63, 446, 99, 29);
-        panel_1.add(completeOrder);
-		completeOrder.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./carrello.png")), 25, 25));
-        completeOrder.addActionListener(this);
-        
-        JPanel panel_servizi = new JPanel();
-        panel_servizi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        panel_servizi.setOpaque(false);
-        panel_servizi.setEnabled(false);
-        panel_servizi.setFocusable(false);
-        panel_servizi.setBackground(new Color(255, 165, 0));
-        panel_servizi.setBounds(146, 6, 36, 32);
-        panel_1.add(panel_servizi);
-        
-        JMenuBar menuBar1 = new JMenuBar();
-        panel_servizi.add(menuBar1);
-        
-        JMenu Servizi = new JMenu("");
-        menuBar1.add(Servizi);
-		Servizi.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Menu.png")), 18, 18));
-        Servizi.addActionListener(this);
-
-        JMenuItem ModificaProfilo = new JMenuItem("Modifica Profilo");
-        ModificaProfilo.setForeground(new Color(255, 140, 0));
-        Servizi.add(ModificaProfilo);
-		ModificaProfilo.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Modifica.png")), 20, 20));
-        ModificaProfilo.addActionListener(this);
-        
-        JMenuItem Uscire = new JMenuItem("Uscire");
-        Uscire.setForeground(new Color(255, 140, 0));
-        Servizi.add(Uscire);
-		Uscire.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Uscire.png")), 25, 25));
-        Uscire.addActionListener(this);
                 
         JPanel globalContainer = new JPanel();
         globalContainer.setBounds(0, 0, 560, 481);
@@ -160,122 +98,369 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         
         JPanel panelMenu = new JPanel();
         panelMenu.setBackground(new Color(255, 140, 0));
-        panelMenu.setBounds(0, 0, 560, 111);
+        panelMenu.setBounds(0, 0, 560, 53);
         globalContainer.add(panelMenu);
         panelMenu.setLayout(null);
         
-        JPanel panelText = new JPanel();
-        panelText.setBackground(new Color(255, 140, 0));
-        panelText.setBounds(0, 0, 560, 51);
-        panelMenu.add(panelText);
-        panelText.setLayout(null);
-        
         JPanel panelBtn = new JPanel();
         panelBtn.setBackground(new Color(255, 140, 0));
-        panelBtn.setBounds(0, 44, 560, 51);
+        panelBtn.setBounds(0, 0, 748, 51);
         panelMenu.add(panelBtn);
         panelBtn.setLayout(null);
         
-        antipasti = new JButton("Antipasti");
-        antipasti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        antipasti.setForeground(new Color(255, 140, 0));
-        antipasti.setBackground(new Color(255, 255, 255));
-        antipasti.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
-        antipasti.setActionCommand("Antipasti");
-        antipasti.setBounds(6, 12, 102, 39);
-		antipasti.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./antipasti.png")), 30, 30));
-        panelBtn.add(antipasti);
-        antipasti.addActionListener(this);
+        buttonQualunque = new JButton("Qualunque");
+        buttonQualunque.setBounds(0, 0, 100, 25);
+        buttonQualunque.addActionListener(this);
+        panelBtn.add(buttonQualunque);
         
-        primi = new JButton("primi");
-        primi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        primi.setForeground(new Color(255, 140, 0));
-        primi.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
-        primi.setActionCommand("Primi");
-        primi.setBounds(107, 12, 84, 39);
-		primi.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./primi.png")), 30, 30));
-        panelBtn.add(primi);
-        primi.addActionListener(this);
+        Button_antipasti = new JButton("Antipasti");
+        Button_antipasti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        Button_antipasti.setForeground(new Color(255, 140, 0));
+        Button_antipasti.setBackground(new Color(255, 255, 255));
+        Button_antipasti.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        Button_antipasti.setActionCommand("Antipasti");
+        Button_antipasti.setBounds(6, 12, 102, 39);
+        Button_antipasti.setToolTipText("Antipasti");
+		Button_antipasti.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./antipasti.png")), 30, 30));
+        panelBtn.add(Button_antipasti);
+        Button_antipasti.addActionListener(this);
+        
+        Button_primi = new JButton("Primi");
+        Button_primi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        Button_primi.setForeground(new Color(255, 140, 0));
+        Button_primi.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        Button_primi.setActionCommand("Primi");
+        Button_primi.setBounds(107, 12, 84, 39);
+        Button_primi.setToolTipText("Primi");
+		Button_primi.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./primi.png")), 30, 30));
+        panelBtn.add(Button_primi);
+        Button_primi.addActionListener(this);
 
-        secondi = new JButton("secondi");
-        secondi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        secondi.setForeground(new Color(255, 140, 0));
-        secondi.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
-        secondi.setActionCommand("Secondi");
-        secondi.setBounds(189, 12, 96, 39);
-		secondi.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./secondi.png")), 30, 30));
-        panelBtn.add(secondi);
-        secondi.addActionListener(this);
+        Button_secondi = new JButton("Secondi");
+        Button_secondi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        Button_secondi.setForeground(new Color(255, 140, 0));
+        Button_secondi.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        Button_secondi.setActionCommand("Secondi");
+        Button_secondi.setBounds(189, 12, 96, 39);
+        Button_secondi.setToolTipText("Secondi");
+		Button_secondi.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./secondi.png")), 30, 30));
+        panelBtn.add(Button_secondi);
+        Button_secondi.addActionListener(this);
 
-        contorni = new JButton("contorni");
-        contorni.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        contorni.setForeground(new Color(255, 140, 0));
-        contorni.setActionCommand("Contorini");
-        contorni.setBounds(284, 11, 96, 39);
-		contorni.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./contorni.png")), 30, 30));
-        panelBtn.add(contorni);
-        contorni.addActionListener(this);
+        Button_contorni = new JButton("contorni");
+        Button_contorni.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        Button_contorni.setForeground(new Color(255, 140, 0));
+        Button_contorni.setActionCommand("Contorini");
+        Button_contorni.setBounds(284, 11, 96, 39);
+        Button_contorni.setToolTipText("Contorini");
+		Button_contorni.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./contorni.png")), 30, 30));
+        panelBtn.add(Button_contorni);
+        Button_contorni.addActionListener(this);
         
-        dolci = new JButton("dolci");
-        dolci.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        dolci.setForeground(new Color(255, 140, 0));
-        dolci.setActionCommand("Dolci");
-        dolci.setBounds(379, 11, 84, 39);
-		dolci.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./dolci.png")), 30, 30));
-        panelBtn.add(dolci);
-        dolci.addActionListener(this);
+        Button_dolci = new JButton("dolci");
+        Button_dolci.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        Button_dolci.setForeground(new Color(255, 140, 0));
+        Button_dolci.setActionCommand("Dolci");
+        Button_dolci.setBounds(379, 11, 84, 39);
+        Button_dolci.setToolTipText("Dolci");
+		Button_dolci.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./dolci.png")), 30, 30));
+        panelBtn.add(Button_dolci);
+        Button_dolci.addActionListener(this);
         
-        bevande = new JButton("bevande");
-        bevande.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        bevande.setForeground(new Color(255, 140, 0));
-        bevande.setActionCommand("Bevande");
-        bevande.setBounds(464, 11, 90, 39);
-		bevande.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./bevande.png")), 30, 30));
-        panelBtn.add(bevande);
-        bevande.addActionListener(this);
+        Button_bevande = new JButton("Bevande");
+        Button_bevande.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        Button_bevande.setForeground(new Color(255, 140, 0));
+        Button_bevande.setActionCommand("Bevande");
+        Button_bevande.setBounds(464, 11, 90, 39);
+        Button_bevande.setToolTipText("Bevande");
+		Button_bevande.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./bevande.png")), 30, 30));
+        panelBtn.add(Button_bevande);
+        Button_bevande.addActionListener(this);
         
         panelMenu.add(panelBtn);
         
         container = new JPanel();
         container.setBackground(new Color(255, 140, 0));
-        container.setBounds(0, 111, 560, 370);
+        container.setBounds(0, 50, 560, 431);
         globalContainer.add(container);
-        
-        container.add(panelContent1);
        
         globalContainer.add(panelMenu, BorderLayout.NORTH);
         globalContainer.add(container, BorderLayout.NORTH);
+        container.setLayout(null);
+        
+        JPanel panel_prodotti = new JPanel();
+        panel_prodotti.setBackground(new Color(255, 165, 0));
+        panel_prodotti.setBounds(6, 47, 548, 272);
+        container.add(panel_prodotti);
+        panel_prodotti.setLayout(null);
+        
+        JSeparator separator_prezzo = new JSeparator();
+        separator_prezzo.setForeground(new Color(255, 255, 255));
+        separator_prezzo.setBounds(0, 153, 554, 12);
+        panel_prodotti.add(separator_prezzo);
+        
+        JLabel Label_scegliProdotto = new JLabel("Scegli prodotto");
+        Label_scegliProdotto.setForeground(new Color(255, 255, 255));
+        Label_scegliProdotto.setBackground(new Color(255, 255, 255));
+        Label_scegliProdotto.setBounds(28, 33, 109, 16);
+        panel_prodotti.add(Label_scegliProdotto);
+
+        /////////////////////////////////////////////////////////////////
+        /////// Non ci si capisce nulla in questo costruttore ///////////
+        /////////////////////////////////////////////////////////////////
+
+	this.quantitaProdotto = (HashMap<Prodotto, Integer>) ctrl.getProdottiDalRistoranteSelezionato().clone();
+	int length = quantitaProdotto.size();
+	this.prodottoCategoria[0] = new Prodotto[length];
+	this.nomiProdottoCategoria[0] = new String[length]; 
+	int i = 0;
+	for(Prodotto p : quantitaProdotto.keySet()) {
+		prodottoCategoria[0][i] = p;
+		nomiProdottoCategoria[0][i] = p.getNome() + " " + "$" + p.getPrezzo();
+		i++;
+	}
+	
+   	String[] categoryName = {"qualunque", "antipasti", "primi", "secondi", "contorni", "dolci", "bevande"}; 
+	for(int j=1; j<7; j++) {
+		String filter = categoryName[j];
+		int lengthCategory = numOfProductByCategory(j);
+		prodottoCategoria[j] = new Prodotto[lengthCategory];
+		nomiProdottoCategoria[j] = new String[lengthCategory];
+		int z = 0; 
+		for(Prodotto p : prodottoCategoria[0]) {
+			if(p.getCategoria().equals(filter)) {
+				prodottoCategoria[j][z] = p;
+				nomiProdottoCategoria[j][z] = p.getNome() + " " + "$" + p.getPrezzo();
+				z++;
+			}
+		}
+	}
+	
+	comboBox_scegliProdotto = new JComboBox(nomiProdottoCategoria[0]);
+	comboBox_scegliProdotto.addActionListener(this);
+	comboBox_scegliProdotto.setBounds(167, 45, 229, 27);
+	panel_prodotti.add(comboBox_scegliProdotto);
+	
+	JSeparator separator_sceltaProdotto = new JSeparator();
+	separator_sceltaProdotto.setForeground(Color.WHITE);
+	separator_sceltaProdotto.setBounds(0, 70, 554, 12);
+	panel_prodotti.add(separator_sceltaProdotto);
+	
+	JLabel Label_quantità = new JLabel("Quantità");
+	Label_quantità.setForeground(Color.WHITE);
+	Label_quantità.setBackground(Color.WHITE);
+	Label_quantità.setBounds(28, 118, 109, 16);
+	panel_prodotti.add(Label_quantità);
+	
+	comboBox_quantità = new JComboBox();
+        ////////////////////////////////////////
+        ////// imposto la quantita di default //
+        ////////////////////////////////////////
+        int quantitaPrimoProdottoIndex = this.quantitaProdotto.get(this.prodottoCategoria[0][0]);
+        String quantitaPrimoProdotto[] = new String[quantitaPrimoProdottoIndex];
+        for(Integer j=1; j<=quantitaPrimoProdottoIndex; j++) {
+        	quantitaPrimoProdotto[j-1] = j.toString();
+        }
+        for(String s : quantitaPrimoProdotto) {
+        	comboBox_quantità.addItem(s);
+        }
+        comboBox_quantità.setBounds(167, 114, 229, 27);
+        comboBox_quantità.addActionListener(this);
+        panel_prodotti.add(comboBox_quantità);
+        
+        JLabel Label_prezzo = new JLabel("filtra per prezzo");
+        Label_prezzo.setBounds(28, 200, 109, 16);
+        panel_prodotti.add(Label_prezzo);
+        Label_prezzo.setForeground(Color.WHITE);
+        
+        comboBoxFiltroPrezzo = new JComboBox(prezzo);
+        comboBoxFiltroPrezzo.setBounds(167, 196, 229, 27);
+        comboBoxFiltroPrezzo.addActionListener(this);
+        panel_prodotti.add(comboBoxFiltroPrezzo);
+        
+        btnConcludiOrdine = new JButton("Concludi ordine");
+        btnConcludiOrdine.setBounds(292, 364, 153, 29);
+        container.add(btnConcludiOrdine);
+        btnConcludiOrdine.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnConcludiOrdine.setForeground(new Color(255, 140, 0));
+        btnConcludiOrdine.setToolTipText("Acquista");
+        btnConcludiOrdine.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./carrello.png")), 25, 25));
+        btnConcludiOrdine.addActionListener(this);
+        
+        Button_aggiungiOrdine = new JButton("Aggiungi all'ordine");
+        Button_aggiungiOrdine.setToolTipText("Acquista");
+        Button_aggiungiOrdine.setForeground(new Color(255, 140, 0));
+        Button_aggiungiOrdine.setBounds(89, 364, 153, 29);
+        container.add(Button_aggiungiOrdine);
+        Button_aggiungiOrdine.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Aggiungi.png")), 15, 15));
+        Button_aggiungiOrdine.addActionListener(this);
+        comboBoxFiltroPrezzo.setVisible(true);
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-          
-        JLabel lbl_Prezzo = new JLabel("prezzo");
-        lbl_Prezzo.setForeground(Color.WHITE);
-        lbl_Prezzo.setBounds(6, 18, 48, 16);
-        panelText.add(lbl_Prezzo);
+                
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(255, 165, 0));
+        panel.setBounds(557, 0, 121, 481);
+        getContentPane().add(panel);
+        panel.setLayout(null);
+                
+        JPanel panel_servizi = new JPanel();
+        panel_servizi.setBounds(79, 6, 36, 32);
+        panel.add(panel_servizi);
+        panel_servizi.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        panel_servizi.setOpaque(false);
+        panel_servizi.setEnabled(false);
+        panel_servizi.setFocusable(false);
+        panel_servizi.setBackground(new Color(255, 165, 0));
+                
+        JMenuBar menuBar1 = new JMenuBar();
+        panel_servizi.add(menuBar1);
         
-        comboBox_prezzo = new JComboBox(prezzo);
-        comboBox_prezzo.setBounds(50, 14, 127, 27);
-        comboBox_prezzo.setVisible(true);
-        panelText.add(comboBox_prezzo);
+        JMenu Servizi = new JMenu("servizi");
+        menuBar1.add(Servizi);
+        Servizi.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Menu.png")), 18, 18));
+        Servizi.addActionListener(this);
+                
+        Button_modificaProfilo = new JMenuItem("Modifica Profilo");
+        Button_modificaProfilo.setForeground(new Color(255, 140, 0));
+        Servizi.add(Button_modificaProfilo);
+        Button_modificaProfilo.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Modifica.png")), 20, 20));
+        Button_modificaProfilo.addActionListener(this);
+                        
+        Button_uscire = new JMenuItem("Uscire");
+        Button_uscire.setForeground(new Color(255, 140, 0));
+        Servizi.add(Button_uscire);
+        Button_uscire.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Uscire.png")), 25, 25));
+        Button_uscire.addActionListener(this);
+                        
+        JSeparator separator_Menu = new JSeparator();
+        separator_Menu.setBounds(0, 39, 124, 12);
+        panel.add(separator_Menu);
+        separator_Menu.setForeground(new Color(255, 255, 255));
         
-        JLabel lblMezzoDiTrasporto = new JLabel("mezzo di trasporto");
-        lblMezzoDiTrasporto.setForeground(Color.WHITE);
-        lblMezzoDiTrasporto.setBounds(189, 14, 143, 29);
-        panelText.add(lblMezzoDiTrasporto);
-        
-        comboBox_MezzoTrasporto = new JComboBox(MezziTrasporto);
-        comboBox_MezzoTrasporto.setBounds(315, 14, 143, 27);
-        comboBox_MezzoTrasporto.setVisible(true);
-        panelText.add(comboBox_MezzoTrasporto); 
+        JLabel icona_foto = new JLabel("Foto prodotto ");
+        icona_foto.setBounds(18, 176, 97, 113);
+        panel.add(icona_foto);
         
     }
     
-    public void actionPerformed(ActionEvent e) {
+     public void actionPerformed(ActionEvent e) {
+			if(e.getSource().equals(btnConcludiOrdine))
+			{
+				this.dispose();
+				ctrl.visualizzazioneFattura(); 
+			}
+			else if(e.getSource().equals(Button_modificaProfilo)) 
+			{
+				  ctrl.ModificaProfilo(); 
+			}
+		    else if(e.getSource().equals(Button_uscire)) 	
+		    {
+		       if(JOptionPane.showConfirmDialog(null,"sicuro di voler uscire?")==0) {
+		    	     ctrl.visualizzazioneLogin(); 	
+	           }
+		    }
+		    else if(e.getSource().equals(comboBox_scegliProdotto)) {
+		    	int index = comboBox_scegliProdotto.getSelectedIndex();
+		    	Prodotto prodottoSelezionato = this.prodottoCategoria[category][index];
+		    	int quantitaProdotto = this.quantitaProdotto.get(prodottoSelezionato);
+		    	if(quantitaProdotto <= 0) {
+		    		this.comboBox_quantità.removeAllItems();
+		    		this.comboBox_quantità.addItem("prodotto non disponibile");
+		    		this.Button_aggiungiOrdine.setEnabled(false);
+		    		this.Button_aggiungiOrdine.setForeground(Color.DARK_GRAY);
+		    	}else {
+		    		this.Button_aggiungiOrdine.setEnabled(true);
+		    		this.Button_aggiungiOrdine.setForeground(new Color(255, 140, 0));
+		    		String[] disponibilita = new String[quantitaProdotto];
+		    		for(Integer i=1; i<=quantitaProdotto; i++) {
+		    			disponibilita[i-1] = i.toString();
+		    		}
+		    		comboBox_quantità.removeAllItems();
+		    		for(String s : disponibilita) {
+		    			comboBox_quantità.addItem(s);
+		    		}
+		    	}
+		    }else if(e.getSource().equals(buttonQualunque)) {
+		    	updateComboBoxProdotti();
+		    	category = 0;
+		    }else if(e.getSource().equals(Button_primi)) {
+		    	updateComboBoxProdotti(2);
+		    	category = 2;
+		    }else if(e.getSource().equals(Button_secondi)) {
+		    	updateComboBoxProdotti(3);
+		    	category = 3;
+		    }else if(e.getSource().equals(Button_antipasti)) {
+		    	updateComboBoxProdotti(1);
+		    	category = 1;
+		    }else if(e.getSource().equals(Button_contorni)) {
+		    	updateComboBoxProdotti(4);
+		    	category = 4;
+		    }else if(e.getSource().equals(Button_dolci)) {
+		    	updateComboBoxProdotti(5);
+		    	category = 5;
+		    }else if(e.getSource().equals(Button_bevande)) {
+		    	updateComboBoxProdotti(6);
+		    	category = 6;
+		    }else if(e.getSource().equals(Button_aggiungiOrdine)){
+		    	int indexProdottoSelezionato = comboBox_scegliProdotto.getSelectedIndex();
+		    	Prodotto prodottoSelezionato = prodottoCategoria[category][indexProdottoSelezionato];
+		    	int quantitaDisponibile = quantitaProdotto.get(prodottoSelezionato);
+		    	int quantitaProdottoSelezionato = quantitaProdotto.get(prodottoSelezionato);
+		    	quantitaProdotto.replace(prodottoSelezionato, quantitaDisponibile - quantitaProdottoSelezionato);
+		    	ctrl.aggiungiProdottoAlCarrello(prodottoSelezionato, quantitaDisponibile);
+		    	updateComboBoxProdotti(category);
+		    }
     }
-
-          
+     
+    // 0 qualunque, 1 antipasti, 2 primi, 3 secondi, 4 contorni, 5 dolci, 6 bevande
+    private int numOfProductByCategory(int categoryIndex) {
+    	String[] categoryName = {"qualunque", "antipasti", "primi", "secondi", "contorni", "dolci", "bevande"}; 
+    	int len = 0; 
+    	String filter = categoryName[categoryIndex];
+    	for(Prodotto p : prodottoCategoria[0]) {
+    		if(p.getCategoria().equals(filter)) {
+    			len++;
+    		}
+    	}
+    	return len;
+    }
+    
+    private void updateComboBoxProdotti(int indexCategory) {
+    	comboBox_scegliProdotto.removeActionListener(this);
+    	comboBox_scegliProdotto.removeAllItems();
+    	comboBox_quantità.removeAllItems();
+    	int len = nomiProdottoCategoria[indexCategory].length;
+    	if(len == 0) {
+    		comboBox_scegliProdotto.addItem("non disponibile");
+    		Button_aggiungiOrdine.setEnabled(false);
+    		this.Button_aggiungiOrdine.setForeground(Color.DARK_GRAY);
+    		return;
+    	}
+   		this.Button_aggiungiOrdine.setEnabled(true);
+   		this.Button_aggiungiOrdine.setForeground(new Color(255, 140, 0));
+    	for(String s : nomiProdottoCategoria[indexCategory]) {
+    		comboBox_scegliProdotto.addItem(s);
+    	}
+        int quantitaPrimoProdottoIndex = this.quantitaProdotto.get(this.prodottoCategoria[indexCategory][0]);
+        String quantitaPrimoProdotto[] = new String[quantitaPrimoProdottoIndex];
+        for(Integer j=1; j<=quantitaPrimoProdottoIndex; j++) {
+        	quantitaPrimoProdotto[j-1] = j.toString();
+        }
+        for(String s : quantitaPrimoProdotto) {
+        	comboBox_quantità.addItem(s);
+        }
+        comboBox_scegliProdotto.addActionListener(this);
+    }
+    
+    private void updateComboBoxProdotti() {
+    	this.updateComboBoxProdotti(0);
+    }
+       
+     // perche' implementare questa interfaccia se poi non la usiamo?
     @Override
     public void mouseClicked(MouseEvent e) {
+
     }
 
     @Override
@@ -298,8 +483,3 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         
     }
 }
-
-   
-         
-   
-

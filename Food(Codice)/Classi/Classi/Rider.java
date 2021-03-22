@@ -12,6 +12,7 @@ public class Rider {
 	private Image fotoRider;
 	private String pathFoto;
 	private int codiceRider;
+
 	public int getCodiceRider() {
 		return codiceRider;
 	}
@@ -30,9 +31,11 @@ public class Rider {
 	}
 	
 	public void addRistoranteAssociato(Ristorante ristorante) {
-		if(!this.ristoranteAssociato[0].equals(ristorante) && !this.ristoranteAssociato[1].equals(ristorante) && !this.ristoranteAssociato[2].equals(ristorante)) {
-			this.ristoranteAssociato[indexRistoranteAssociato++] = ristorante;
-		}
+		this.ristoranteAssociato[indexRistoranteAssociato++] = ristorante;
+	}
+	
+	public ArrayList<Veicolo> getParcoVeicoli(){
+		return this.parcoVeicoli;
 	}
 
 }

@@ -133,14 +133,6 @@ CREATE TABLE ordine(
     ON DELETE CASCADE
 );
 
-CREATE VIEW riderView AS 
+CREATE VIEW riderVeicoloView AS 
 SELECT R.codiceRider, V.tipoVeicolo
 FROM rider AS R NATURAL JOIN veicolo AS V;
-
-CREATE VIEW riderProdottoView AS 
-SELECT codiceRider, codiceSeriale
-FROM corrierePer NATURAL JOIN fornitura;
-
-CREATE VIEW prodottoVeicoloView AS
-SELECT P.nome, P.prezzo, P.codiceSeriale, P.scadenza, P.pathFoto, P.tipoProdotto, P.categoria, tipoVeicolo
-FROM prodotto AS P NATURAL JOIN riderProdottoView NATURAL JOIN riderView;

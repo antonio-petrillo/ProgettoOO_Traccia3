@@ -16,6 +16,7 @@ public class Carrello {
 		this.quantitaProdotto = new HashMap<Prodotto, Integer>();
 	}
 
+	// a che serve questo getter?
 	public int getCodiceCarrello() {
 		return codiceCarrello;
 	}

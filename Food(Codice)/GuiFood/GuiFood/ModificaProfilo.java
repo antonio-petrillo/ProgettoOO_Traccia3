@@ -21,9 +21,9 @@ public  class ModificaProfilo extends JDialog implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel = new JPanel();
 	private JTextField textField_NuovaPassword;
-    private  String ApplicaModifiche_cmd = "Applica Modifiche";
-	
 	private Controller ctrl;
+
+	private JButton btnApplicaModifiche;
 	
 	public ModificaProfilo(Controller ctrl) {
 		setBackground(Color.WHITE);
@@ -66,18 +66,17 @@ public  class ModificaProfilo extends JDialog implements ActionListener{
 		contentPanel.add(textField_NuovaPassword);
 		
 		
-		JButton btnApplicaModifiche = new JButton("Applica Modifiche");
+		btnApplicaModifiche = new JButton("Applica Modifiche");
 		btnApplicaModifiche.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnApplicaModifiche.setBounds(195, 419, 187, 29);
 		btnApplicaModifiche.setForeground(new  Color(255, 165, 0));
 		contentPanel.add(btnApplicaModifiche);
 		btnApplicaModifiche.addActionListener(this);
-		btnApplicaModifiche.setActionCommand(ApplicaModifiche_cmd);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals(ApplicaModifiche_cmd))
+		if(e.getSource().equals(btnApplicaModifiche))
         	{
 				ctrl.visualizzazioneMenu();
 			}		

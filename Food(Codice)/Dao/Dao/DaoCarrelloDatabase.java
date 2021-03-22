@@ -21,8 +21,7 @@ public class DaoCarrelloDatabase implements DaoCarrello {
 			nuovoCodiceCarrello = rs.getInt("nextKey");
 		}
 		carrello = new Carrello(nuovoCodiceCarrello);
-		query = "INSERT INTO carrello(data) VALUES(current_date)";
-		return null;
+		return carrello;
 	}
 	
 	public boolean inserisciCarrello(Carrello carrello) {

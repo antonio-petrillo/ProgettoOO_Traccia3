@@ -32,7 +32,7 @@ public class VisualizzazioneAvvisi extends JDialog {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public VisualizzazioneAvvisi(Controller ctrl,String... stringErrore) {
+	public VisualizzazioneAvvisi(Controller ctrl, String ... stringErrore) {
 		setBounds(new Rectangle(0, 13, 0, 0));
 		setResizable(false);
 		setForeground(new Color(255, 165, 0));

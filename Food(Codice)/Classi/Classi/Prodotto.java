@@ -11,31 +11,22 @@ import GuiFood.Login;
 
 public class Prodotto {
 
-	// TODO : collegameto con magazzino
 	private String nome;
 	private double prezzo;
 	private int codiceSeriale;
-	public int getCodiceSeriale() {
-		return codiceSeriale;
-	}
 
-	public String getPathFoto() {
-		return pathFoto;
-	}
-
-	private String descrizione;
+	private String categoria;
 	private Date scadenzaProdotto;
 	private ImageIcon fotoProdotto = null;
 	private String pathFoto;
 
- 	public Prodotto(String nome, double prezzo, int codiceSeriale, String descrizione, Date scadenzaProdotto, String pathFoto) {
+ 	public Prodotto(String nome, double prezzo, int codiceSeriale, String categoria, String pathFoto, Date scadenzaProdotto) {
 		this.nome = nome;
 		this.prezzo = prezzo;
 		this.codiceSeriale = codiceSeriale;
-		this.descrizione = descrizione;
+		this.categoria = categoria;
 		this.scadenzaProdotto = scadenzaProdotto;
 		this.pathFoto = pathFoto;
-		// TODO : aggiungi le foto dei prodotti nel sistema e cambia i path a dovere
 		this.fotoProdotto = new ImageIcon(Login.class.getResource(pathFoto));
 	}
  	
@@ -74,7 +65,7 @@ public class Prodotto {
 	}
 
 	public String getDescrizione() {
-		return descrizione;
+		return categoria;
 	}
 
 	public Date getScadenzaProdotto() {
@@ -83,6 +74,18 @@ public class Prodotto {
 
 	public ImageIcon getFotoProdotto() {
 		return fotoProdotto;
+	}
+
+	public int getCodiceSeriale() {
+		return codiceSeriale;
+	}
+
+	public String getPathFoto() {
+		return pathFoto;
+	}
+
+	public String getCategoria() {
+		return this.categoria;
 	}
 
 }

@@ -1,6 +1,5 @@
 package Classi;
 
-
 import java.awt.Image;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,17 +26,21 @@ public class Controller {
     private Menu menu;
     private SceltaRistorante sceltaRistorante;
 
+    private ArrayList<Ristorante> ristoranti;
+    private ArrayList<Rider> riders;
+
     private Utente utenteLoggato;
-    private Ristorante ristorante;
-    private Rider rider;
+    private Ristorante ristoranteSelezionato;
+    private Rider riderSelezionato;
     private Carrello carrello;
     
-    // TODO : aggiungi i vari '.dispose()'
 	public Controller() {
+		this.ottieniRistoranti();
+		this.ottieniRider();
+		this.associaRiderRistoranti();
 		login = new Login(this);
 		login.setVisible(true);
 		login.setLocationRelativeTo(null);
-	   
 	}
 
 	 public void visualizzazioneLogin() {
@@ -55,12 +58,21 @@ public class Controller {
 	 }
    
 	 public void visualizzazioneMenu() {
+		creaNuovoCarrello();
    		menu = new Menu(this);
    		menu.setLocationRelativeTo(null);
     	menu.setVisible(true);	
     }
 	  
-    public void VisualizzazioneAvvisi(String stringErroreCommesso) 
+    public void VisualizzazioneAvvisi(String ... stringErroreCommesso) 
+    {
+    	dialogErrore = new VisualizzazioneAvvisi(this,stringErroreCommesso);
+    	dialogErrore.setVisible(true);
+    	dialogErrore.setBounds(0, 0,360, 150);
+		dialogErrore.setLocationRelativeTo(menu);
+    }
+
+    public void VisualizzazioneAvvisi(ArrayList<String> stringErroreCommesso) 
     {
     	dialogErrore = new VisualizzazioneAvvisi(this,stringErroreCommesso);
     	dialogErrore.setVisible(true);
@@ -166,14 +178,89 @@ public class Controller {
 		return this.utenteLoggato.getEmail();
 	}
 
-	public Ristorante[] ottieniRistoranti() {
-		// TODO Auto-generated method stub
-		return null;
+	private void  ottieniRistoranti() {
+		DaoRistorante daoRistorante = new DaoRistoranteDatabase();
+		try {
+			this.ristoranti = daoRistorante.ottieniRistoranti();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+			System.out.println("Impossibile connettersi al database");
+			this.VisualizzazioneAvvisi("E' stato riscontrato un problema interno a Food", "Impossibile connettersi al database", "Chiusura applicazione");
+			System.exit(-1);
+		}
+	}
+	
+	private void ottieniRider() {
+		DaoRider daoRider = new DaoRiderDatabase();
+		try {
+			this.riders = daoRider.ottieniRider();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+			System.out.println("Impossibile connettersi al database");
+			this.VisualizzazioneAvvisi("E' stato riscontrato un problema interno a Food", "Impossibile connettersi al database", "Chiusura applicazione");
+			System.exit(-1);
+		}
+	}
+	
+	private void associaRiderRistoranti() {
+		DaoRistorante daoRistorante = new DaoRistoranteDatabase();
+		HashMap<Integer, ArrayList<Integer>> associazzioni = null;
+		try {
+			associazzioni = daoRistorante.ottieniAssociazioni();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+			System.out.println("Impossibile connettersi al database");
+			this.VisualizzazioneAvvisi("E' stato riscontrato un problema interno a Food", "Impossibile connettersi al database", "Chiusura applicazione");
+			System.exit(-1);
+		}
+		int codiceRistorante;
+		for(Ristorante ristorante : this.ristoranti) {
+			codiceRistorante = ristorante.getCodiceRistorante();
+			ArrayList<Integer> codiciRiderAssociati = associazzioni.get(codiceRistorante);
+			for(Integer codiceRider : codiciRiderAssociati) {
+				for(Rider rider : this.riders) {
+					if(rider.getCodiceRider() == codiceRider) {
+						ristorante.addRider(rider);
+						rider.addRistoranteAssociato(ristorante);
+					}
+				}
+			}
+		}
 	}
 
-	public ArrayList<Prodotto> ottieniProdotti() {
-		// TODO Auto-generated method stub
-		return null;
+	private void creaNuovoCarrello() {
+		DaoCarrello daoCarrello = new DaoCarrelloDatabase();
+		try {
+			this.carrello = daoCarrello.creaNuovoCarrello();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+			System.out.println("Impossibile connettersi al database");
+			this.VisualizzazioneAvvisi("E' stato riscontrato un problema interno a Food", "Impossibile connettersi al database", "Chiusura applicazione");
+			System.exit(-1);
+		}
+		
 	}
+
+	public ArrayList<Ristorante> ottieniRistorantiDisponibili() {
+		return this.ristoranti;
+	}
+
+	public void setRistoranteScelto(Ristorante ristoranteScelto) {
+		this.ristoranteSelezionato = ristoranteScelto;
+	}
+
+	public HashMap<Prodotto, Integer> getProdottiDalRistoranteSelezionato() {
+		return this.ristoranteSelezionato.getProdottiInVendita();
+	}
+
+	public void aggiungiProdottoAlCarrello(Prodotto prodotto, int quantita) {
+		if(carrello.getQuantitaProdotto().containsKey(prodotto)) {
+			int quantitaAttuale = carrello.getQuantitaProdotto().get(prodotto);
+			carrello.getQuantitaProdotto().replace(prodotto, quantitaAttuale + quantita);
+		}else {
+			carrello.getQuantitaProdotto().put(prodotto, quantita);
+		}
+	}
+	
 
 }

@@ -11,20 +11,21 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import Classi.Controller;
-import Classi.Indirizzo;
-import Classi.Utente;
 import java.awt.Cursor;
 
 public  class Registrazioni extends JDialog implements ActionListener{
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 	private  JPanel textField_Iscrizione = new JPanel();
 	private JTextField textField_Nome;
+	private JTextField textField_Password;	
 	private JTextField textField_Cognome;
 	private JTextField textField_Email;
 	private JTextField textField_NumTelefonico;
@@ -33,16 +34,10 @@ public  class Registrazioni extends JDialog implements ActionListener{
 	private JTextField textField_Cap;
 	private JTextField textField_NomeVia;
 	private JTextField textField_N_Civico;
-
 	private JButton Button_Iscriviti;
-	///
-	///
-	
-    private  String Iscriviti_cmd = "Iscriviti";  
 
 	private Controller ctrl;
 
-	private JTextField textField_Password;	
 	 public Registrazioni(final Controller ctrl) {
 		setBackground(Color.WHITE);
 		setForeground(Color.WHITE);
@@ -338,11 +333,12 @@ public  class Registrazioni extends JDialog implements ActionListener{
 		Button_Iscriviti.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		Button_Iscriviti.setBounds(192, 334, 187, 29);
 		Button_Iscriviti.setForeground(new  Color(255, 165, 0));
+		Button_Iscriviti.setToolTipText("Iscriviti");
 		textField_Iscrizione.add(Button_Iscriviti);
 		Button_Iscriviti.addActionListener(this);
 	}
 
-	 //TODO: RIVEDERE MEGLIO
+	 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(Button_Iscriviti)) {
@@ -357,7 +353,11 @@ public  class Registrazioni extends JDialog implements ActionListener{
 			String nomeVia=textField_NomeVia.getText();
 			int numCivico;
 			try {
-				numCivico=Integer.parseInt(textField_N_Civico.getText().toString());
+			     numCivico=Integer.parseInt(textField_N_Civico.getText().toString());
+			     Controllo_NumeroCivico();
+			     Controllo_Email();
+			     Controllo_Provincia();
+			     Controllo_Cap();
 			    if(ctrl.effettuaRegistrazione(nome, cognome, email, password,  numeroTelefonico, nomeVia, numCivico, Cap, citta, provincia)==false) {
 				      ctrl.VisualizzazioneAvvisi("Utente già presente");
 			    }  else {
@@ -368,7 +368,64 @@ public  class Registrazioni extends JDialog implements ActionListener{
 			 }	
 		}
 	}
+	
+	public String Controllo_NumeroCivico() {
+			int numCivico;
+			try {
+				numCivico=Integer.parseInt(textField_N_Civico.getText().toString());
+			    if(numCivico<=0) {
+			    	return "il numero civico deve essere un numero maggiore di 0";
+			    }
+			 } catch (NumberFormatException ae){
+				 
+			     return "Il formato del Numero civico non è corretto";
+			  }
+			
+			return "";
+			
+	    	}
+
+	
+	public String Controllo_Email() {
+		String email=textField_Email.getText();
+		try {
+		  if(email.matches("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"+"[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")) {
+	      
+		  }
+		} catch (Exception ae){
+		     return "Il formato email non è corretto";
+		  }
+		return "";	
+	   }
+		
+	
+	public String Controllo_Provincia() {
+			String provincia=textField_Provincia.getText();
+			if(!provincia.matches("[A-Za-z]{2}")){
+		     return "Il formato provincia non è corretto";
+			}
+		
+	   return "";
+	
+	}
+	
+	
+	public String Controllo_Cap() {
+			String Cap=textField_Cap.getText();
+			if(!Cap.matches("[0-9]{5}")){
+		      return "Il formato Cap non è corretto";
+		    }
+		
+		   return "";
+
+	   }
+	
 }
+
+	
+
+
+
 
 	
 

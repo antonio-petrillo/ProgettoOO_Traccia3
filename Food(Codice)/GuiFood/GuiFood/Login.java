@@ -82,12 +82,6 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 		this.getContentPane().add(Label_Password);
 		
 		textField_Password = new JPasswordField();
-		textField_Password.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				textField_Password.setText("");
-			}
-		});
 		textField_Password.setForeground(Color.BLACK);
 		textField_Password.setBackground(new Color(255, 165, 0));
 		textField_Password.setBorder(null);
@@ -161,7 +155,7 @@ public  class Login extends JFrame implements ActionListener,MouseListener,KeyLi
 			else if(e.getSource().equals(Button_Accedi))
 			{
 				String password=new String(textField_Password.getPassword());
-				if(!password.equals("")) {
+				if(!password.equals("") && !textField_Email.getText().equals("")) {
 					this.dispose();
 					if(ctrl.effettuaAccesso(textField_Email.getText(), password)) {
 						ctrl.VisualizzaSceltaRistorante();

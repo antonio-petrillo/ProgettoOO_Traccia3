@@ -12,5 +12,9 @@ public class Veicolo {
 	public Veicolo(int codiceSeriale) {
 		this.codiceSeriale = codiceSeriale;
 	}
+	
+	protected Veicolo() {
+		
+	}
  
 }
