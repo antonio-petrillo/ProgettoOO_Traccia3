@@ -21,7 +21,6 @@ public class Controller {
 	private Password_Dimenticata passwordDimenticata;
 	private VisualizzazioneAvvisi dialogErrore;
 	private ModificaProfilo modificaProfilo;
-	private Riders sceltaRider;
 	private Fattura fattura;
     private Menu menu;
     private SceltaRistorante sceltaRistorante;
@@ -85,12 +84,6 @@ public class Controller {
 		passwordDimenticata.setVisible(true);
 		passwordDimenticata.setLocationRelativeTo(login);
 
-	}
-	
-	public void visualizzazioneSceltaRider() {
-		sceltaRider = new Riders(this);
-		sceltaRider.setVisible(true);
-		sceltaRider.setLocationRelativeTo(fattura);
 	}
 	
 	public void visualizzazioneFattura() {
