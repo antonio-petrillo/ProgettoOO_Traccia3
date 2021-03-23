@@ -366,9 +366,9 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 		    	int index = comboBox_scegliProdotto.getSelectedIndex();
 		    	Prodotto prodottoSelezionato = this.prodottoCategoria[category][index];
 		    	if(prodottoSelezionato.getPrezzo() >= min && prodottoSelezionato.getPrezzo() <= max) {
-		    		comboBox_scegliProdotto.setBackground(Color.RED);
-		    	}else {
 		    		comboBox_scegliProdotto.setBackground(Color.WHITE);
+		    	}else {
+		    		comboBox_scegliProdotto.setBackground(Color.RED);
 		    	}
 		    	int quantitaProdotto = this.quantitaProdotto.get(prodottoSelezionato);
 		    	if(quantitaProdotto <= 0) {
