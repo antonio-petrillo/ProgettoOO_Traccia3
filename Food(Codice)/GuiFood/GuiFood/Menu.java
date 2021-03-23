@@ -58,6 +58,8 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 
     private Controller ctrl;
 
+    private double min = -1;
+    private double max = Double.MAX_VALUE;
 
 	private JComboBox comboBoxFiltroPrezzo;
 	private JComboBox<String> comboBox_quantità;
@@ -109,7 +111,8 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         panelBtn.setLayout(null);
         
         buttonQualunque = new JButton("Qualunque");
-        buttonQualunque.setBounds(0, 0, 100, 25);
+        buttonQualunque.setForeground(new Color(255, 140, 0));
+        buttonQualunque.setBounds(26, 364, 153, 29);
         buttonQualunque.addActionListener(this);
         panelBtn.add(buttonQualunque);
         
@@ -234,6 +237,7 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 	}
 	
 	comboBox_scegliProdotto = new JComboBox(nomiProdottoCategoria[0]);
+	comboBox_scegliProdotto.setBackground(Color.WHITE);
 	comboBox_scegliProdotto.addActionListener(this);
 	comboBox_scegliProdotto.setBounds(167, 45, 229, 27);
 	panel_prodotti.add(comboBox_scegliProdotto);
@@ -273,6 +277,7 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         comboBoxFiltroPrezzo = new JComboBox(prezzo);
         comboBoxFiltroPrezzo.setBounds(167, 196, 229, 27);
         comboBoxFiltroPrezzo.addActionListener(this);
+        comboBoxFiltroPrezzo.setSelectedIndex(0);
         panel_prodotti.add(comboBoxFiltroPrezzo);
         
         btnConcludiOrdine = new JButton("Concludi ordine");
@@ -288,9 +293,9 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
         Button_aggiungiOrdine.setToolTipText("Acquista");
         Button_aggiungiOrdine.setForeground(new Color(255, 140, 0));
         Button_aggiungiOrdine.setBounds(89, 364, 153, 29);
+        Button_aggiungiOrdine.addActionListener(this);
         container.add(Button_aggiungiOrdine);
         Button_aggiungiOrdine.setIcon(ctrl.scaleImageIcon(new ImageIcon(Menu.class.getResource("/Menu./Aggiungi.png")), 15, 15));
-        Button_aggiungiOrdine.addActionListener(this);
         comboBoxFiltroPrezzo.setVisible(true);
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -360,6 +365,11 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 		    else if(e.getSource().equals(comboBox_scegliProdotto)) {
 		    	int index = comboBox_scegliProdotto.getSelectedIndex();
 		    	Prodotto prodottoSelezionato = this.prodottoCategoria[category][index];
+		    	if(prodottoSelezionato.getPrezzo() >= min && prodottoSelezionato.getPrezzo() <= max) {
+		    		comboBox_scegliProdotto.setBackground(Color.RED);
+		    	}else {
+		    		comboBox_scegliProdotto.setBackground(Color.WHITE);
+		    	}
 		    	int quantitaProdotto = this.quantitaProdotto.get(prodottoSelezionato);
 		    	if(quantitaProdotto <= 0) {
 		    		this.comboBox_quantità.removeAllItems();
@@ -403,10 +413,29 @@ public class Menu extends JFrame implements ActionListener,MouseListener {
 		    	int indexProdottoSelezionato = comboBox_scegliProdotto.getSelectedIndex();
 		    	Prodotto prodottoSelezionato = prodottoCategoria[category][indexProdottoSelezionato];
 		    	int quantitaDisponibile = quantitaProdotto.get(prodottoSelezionato);
-		    	int quantitaProdottoSelezionato = quantitaProdotto.get(prodottoSelezionato);
+		    	int quantitaProdottoSelezionato = comboBox_quantità.getSelectedIndex() + 1;
 		    	quantitaProdotto.replace(prodottoSelezionato, quantitaDisponibile - quantitaProdottoSelezionato);
-		    	ctrl.aggiungiProdottoAlCarrello(prodottoSelezionato, quantitaDisponibile);
+		    	ctrl.aggiungiProdottoAlCarrello(prodottoSelezionato, quantitaProdottoSelezionato);
 		    	updateComboBoxProdotti(category);
+		    }else if(e.getSource().equals(comboBoxFiltroPrezzo)) {
+		    	int index = comboBoxFiltroPrezzo.getSelectedIndex();
+		    	String filtro = this.prezzo[index];
+		    	if(filtro.equals("qualuque")) {
+		    		min = -1;
+		    		max = Double.MAX_VALUE;
+		    	}else if(filtro.equals("0-5 €")) {
+		    		min = 0;
+		    		max = 5;
+		    	}else if(filtro.equals("5-10 €")) {
+		    		min = 5;
+		    		max = 10;
+		    	}else if(filtro.equals("10-20 €")) {
+		    		min = 10;
+		    		max = 20;
+		    	}else { // 20-75
+		    		min = 20;
+		    		max = 75;
+		    	}
 		    }
     }
      

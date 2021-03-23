@@ -44,9 +44,9 @@ public class VisualizzazioneAvvisi extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		DefaultListModel<String>  defaultListModel = new DefaultListModel<String>();
-		JList<String> listaErrori = new JList<>(defaultListModel);
-		listaErrori.setBackground(Color.ORANGE);
-		getContentPane().add(new JScrollPane(listaErrori));
+		JList<String> listaAvvisi = new JList<>(defaultListModel);
+		listaAvvisi.setBackground(Color.ORANGE);
+		getContentPane().add(new JScrollPane(listaAvvisi));
 		for(String errore: stringErrore) {
 			defaultListModel.addElement(errore);
 		}
@@ -66,8 +66,8 @@ public class VisualizzazioneAvvisi extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		DefaultListModel<String>  defaultListModel = new DefaultListModel<String>();
-		JList<String> listaErrori = new JList<>(defaultListModel);
-		getContentPane().add(listaErrori);
+		JList<String> listaAvvisi = new JList<>(defaultListModel);
+		getContentPane().add(listaAvvisi);
 		for(String errore: stringErrore) {
 			defaultListModel.addElement(errore);
 		}

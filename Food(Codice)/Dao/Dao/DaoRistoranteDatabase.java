@@ -101,5 +101,18 @@ public class DaoRistoranteDatabase implements DaoRistorante {
 		}
 		return associazioni;
 	}
+	
+	public void aggiornaForniture(Ristorante ristorante, HashMap<Prodotto, Integer> prodottiDaAggiornare) throws ClassNotFoundException, SQLException {
+		String query = "UPDATE fornitura SET quantitaProdotto = ? WHERE codiceRistorante = ? AND codiceSeriale = ?";
+		Connection connection = DBconnection.getInstance().getConn();
+		for(Prodotto p : prodottiDaAggiornare.keySet()) {
+			PreparedStatement stmt = connection.prepareStatement(query);
+			int nuovaQuantita = ristorante.getProdottiInVendita().get(p) - prodottiDaAggiornare.get(p);
+			stmt.setInt(1, nuovaQuantita);
+			stmt.setInt(2, ristorante.getCodiceRistorante());
+			stmt.setInt(3, p.getCodiceSeriale());
+			stmt.execute();
+		}
+	}
 
 }

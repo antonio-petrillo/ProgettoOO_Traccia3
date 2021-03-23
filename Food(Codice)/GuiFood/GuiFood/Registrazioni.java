@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
@@ -342,6 +343,7 @@ public  class Registrazioni extends JDialog implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().equals(Button_Iscriviti)) {
+			ArrayList<String> errori = new ArrayList<String>();
 			String nome=textField_Nome.getText();
 			String cognome=textField_Cognome.getText();
 			String email=textField_Email.getText();
@@ -351,26 +353,38 @@ public  class Registrazioni extends JDialog implements ActionListener{
 			String citta=textField_Città.getText();
 			String Cap=textField_Cap.getText();
 			String nomeVia=textField_NomeVia.getText();
-			int numCivico;
-			try {
-			     numCivico=Integer.parseInt(textField_N_Civico.getText().toString());
-			     Controllo_NumeroCivico();
-			     Controllo_Email();
-			     Controllo_Provincia();
-			     Controllo_Cap();
-			    if(ctrl.effettuaRegistrazione(nome, cognome, email, password,  numeroTelefonico, nomeVia, numCivico, Cap, citta, provincia)==false) {
-				      ctrl.VisualizzazioneAvvisi("Utente già presente");
-			    }  else {
-			    	  ctrl.visualizzazioneLogin();
-			     }
-			 } catch (NumberFormatException ae){
-			      ctrl.VisualizzazioneAvvisi("Il formato di numero civico non è corretto");
-			 }	
+			String erroreNumCivico = Controllo_NumeroCivico();
+			if(!erroreNumCivico.equals("")) {
+				errori.add(erroreNumCivico);
+			}
+		    String erroreEmail = Controllo_Email();
+		    if(!erroreEmail.equals("")) {
+		    	errori.add(erroreEmail);
+		    }
+		    String erroreProvincia = Controllo_Provincia();
+		    if(!erroreProvincia.equals("")) {
+		    	errori.add(erroreProvincia);
+		    }
+		    String erroreCap = Controllo_Cap();
+		    if(!erroreCap.equals("")) {
+		    	errori.add(erroreCap);
+		    }
+		    if(errori.size() <= 0) {
+		    	ctrl.VisualizzazioneAvvisi(errori);
+		    }else {
+		    	int numCivico = -1;
+		    	try {
+		    		numCivico = Integer.parseInt(textField_N_Civico.getText().toString());
+		    	}catch(NumberFormatException ae) {
+		    		ae.printStackTrace();
+		    	}
+		    	ctrl.effettuaRegistrazione(nome, cognome, email, password, numeroTelefonico, nomeVia, numCivico, Cap, citta, provincia.toLowerCase());
+		    }
 		}
 	}
 	
 	public String Controllo_NumeroCivico() {
-			int numCivico;
+		int numCivico;
 			try {
 				numCivico=Integer.parseInt(textField_N_Civico.getText().toString());
 			    if(numCivico<=0) {

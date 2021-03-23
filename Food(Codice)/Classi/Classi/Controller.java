@@ -254,13 +254,43 @@ public class Controller {
 	}
 
 	public void aggiungiProdottoAlCarrello(Prodotto prodotto, int quantita) {
-		if(carrello.getQuantitaProdotto().containsKey(prodotto)) {
-			int quantitaAttuale = carrello.getQuantitaProdotto().get(prodotto);
-			carrello.getQuantitaProdotto().replace(prodotto, quantitaAttuale + quantita);
-		}else {
-			carrello.getQuantitaProdotto().put(prodotto, quantita);
-		}
+		this.carrello.aggiungiProdotto(prodotto, quantita);
 	}
-	
+
+	public ArrayList<Rider> ottieniRiderDelRistorante() {
+		return this.ristoranteSelezionato.getRiders();
+	}
+
+	public void setRiderSelezionato(Rider riderSelezionato) {
+		this.riderSelezionato = riderSelezionato;
+	}
+
+	public void svuotaCarrello() {
+		int codiceCarrello = this.carrello.getCodiceCarrello();
+		Carrello nuovoCarrello = new Carrello(codiceCarrello);
+		this.carrello = nuovoCarrello;
+	}
+
+	public void effettuaOrdine() {
+		DaoRistorante daoRistorante = new DaoRistoranteDatabase();
+		try {
+			daoRistorante.aggiornaForniture(ristoranteSelezionato, carrello.getQuantitaProdotto());
+		} catch (ClassNotFoundException | SQLException e) {
+			System.out.println("Impossibile connettersi al database");
+			this.VisualizzazioneAvvisi("E' stato riscontrato un problema interno a Food", "Impossibile connettersi al database", "Chiusura applicazione");
+			System.exit(-1);
+			e.printStackTrace();
+		}
+		DaoOrdine daoOrdine = new DaoOrdineDatabase();
+		daoOrdine.inserisciNuovoOrdine(utenteLoggato, carrello, ristoranteSelezionato, riderSelezionato);
+	}
+
+	public Utente ottieniUtente() {
+		return this.utenteLoggato;
+	}
+
+	public Carrello ottieniCarrello() {
+		return this.carrello;
+	}
 
 }

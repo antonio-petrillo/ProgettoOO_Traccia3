@@ -8,33 +8,57 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import Classi.Controller;
+import Classi.Indirizzo;
 import Classi.Ordine;
+import Classi.Prodotto;
 import Classi.Rider;
+import Classi.Utente;
 
 import javax.swing.JComboBox;
 import java.awt.Cursor;
+import javax.swing.JList;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultListModel;
+
+import java.awt.Dimension;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 public class Fattura extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JTextField textField_Nome;
     private JTextField textField_Cognome;
+    private JTextField textField_Telefono;
+    private JTextField textField_IndirizzoEmail;
     private JTextField textField_Provincia;
     private JTextField textField_Via;
-    private JTextField textField_Telefono;
     private JTextField textField_CAP;
-    private JTextField textField_IndirizzoEmail;
     private String Indietro_cmd = "Indietro";  
     private String ScegliRiders_cmd = "Scegli riders";
     private String Annulla_cmd = "Annulla";
     private String EffettuaOrdine_cmd = "Effettua Ordine";
     private Controller ctrl;
+    
+    private Rider[] riderDisponibili;
+    private String[] nomiRider; 
 
-    private JComboBox<Rider> comboBox_Riders; public Fattura(Controller ctrl){
+
+    private JButton btnAnnulla;
+    private JButton btnEffettuaOrdine;
+
+    private JComboBox<String> comboBox_Riders; 
+    @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+	public Fattura(Controller ctrl){
+    	
+    	Utente utente = ctrl.ottieniUtente(); 
 
 		setResizable(false);
 		setTitle("Dettagli fattura");
@@ -49,16 +73,6 @@ public class Fattura extends JFrame implements ActionListener {
 		Label_Fattura_1.setFont(new Font("Lucida Grande", Font.BOLD, 30));
 		Label_Fattura_1.setBounds(37, 6, 507, 43);
 		getContentPane().add(Label_Fattura_1);
-			
-		JButton btnIndietro = new JButton("");
-		btnIndietro.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnIndietro.setBackground(new Color(255, 255, 255));
-		btnIndietro.setBounds(6, 6, 29, 37);
-		btnIndietro.setIcon(ctrl.scaleImageIcon(new ImageIcon(Ordine.class.getResource("/Fattura./indietro.png")), 25, 25));
-		btnIndietro.setName("indietro"); 
-		getContentPane().add(btnIndietro);
-		btnIndietro.addActionListener(this);
-		btnIndietro.setActionCommand(Indietro_cmd);
 			
 		JLabel label_nome = new JLabel("Nome");
 		label_nome.setForeground(Color.WHITE);
@@ -75,7 +89,7 @@ public class Fattura extends JFrame implements ActionListener {
 		separator_Nome.setBounds(6, 93, 178, 12);
 		getContentPane().add(separator_Nome);
 		
-		textField_Nome = new JTextField();
+		textField_Nome = new JTextField(utente.getNome());
 		textField_Nome.setSelectionColor(Color.LIGHT_GRAY);
 		textField_Nome.setForeground(Color.BLACK);
 		textField_Nome.setFont(new Font("Times New Roman", Font.ITALIC, 14));
@@ -84,6 +98,7 @@ public class Fattura extends JFrame implements ActionListener {
 		textField_Nome.setBorder(null);
 		textField_Nome.setBackground(new Color(255, 165, 0));
 		textField_Nome.setBounds(26, 77, 158, 18);
+		textField_Nome.setEditable(false);
 		getContentPane().add(textField_Nome);
 		
 		JLabel label_cognome = new JLabel("Cognome");
@@ -101,7 +116,7 @@ public class Fattura extends JFrame implements ActionListener {
 		separator_Cognome.setBounds(239, 93, 199, 12);
 		getContentPane().add(separator_Cognome);
 		
-		textField_Cognome = new JTextField();
+		textField_Cognome = new JTextField(utente.getCognome());
 		textField_Cognome.setSelectionColor(Color.LIGHT_GRAY);
 		textField_Cognome.setForeground(Color.BLACK);
 		textField_Cognome.setFont(new Font("Times New Roman", Font.ITALIC, 14));
@@ -110,6 +125,7 @@ public class Fattura extends JFrame implements ActionListener {
 		textField_Cognome.setBorder(null);
 		textField_Cognome.setBackground(new Color(255, 165, 0));
 		textField_Cognome.setBounds(260, 77, 178, 18);
+		textField_Cognome.setEditable(false);
 		getContentPane().add(textField_Cognome);
 		
 		JLabel lblVia = new JLabel("Via ");
@@ -128,7 +144,9 @@ public class Fattura extends JFrame implements ActionListener {
 		separator_Via.setBounds(6, 146, 188, 12);
 		getContentPane().add(separator_Via);
 		
-		textField_Via = new JTextField();
+		Integer numCivico = utente.getIndirizzo().getNumeroCivico();
+		textField_Via = new JTextField(utente.getIndirizzo().getNomeVia() + " " + numCivico.toString());
+		textField_Via.setEditable(false);
 		textField_Via.setSelectionColor(Color.LIGHT_GRAY);
 		textField_Via.setForeground(Color.BLACK);
 		textField_Via.setFont(new Font("Times New Roman", Font.ITALIC, 14));
@@ -154,7 +172,8 @@ public class Fattura extends JFrame implements ActionListener {
 		separator_Cap.setBounds(240, 146, 199, 11);
 		getContentPane().add(separator_Cap);
 		
-		textField_CAP = new JTextField();
+		textField_CAP = new JTextField(utente.getIndirizzo().getCap());
+		textField_CAP.setEditable(false);
 		textField_CAP.setSelectionColor(Color.LIGHT_GRAY);
 		textField_CAP.setForeground(Color.BLACK);
 		textField_CAP.setFont(new Font("Times New Roman", Font.ITALIC, 14));
@@ -180,7 +199,8 @@ public class Fattura extends JFrame implements ActionListener {
 		Provincia.setBounds(6, 207, 188, 12);
 		getContentPane().add(Provincia);
 		
-		textField_Provincia = new JTextField();
+		textField_Provincia = new JTextField(utente.getIndirizzo().getProvincia());
+		textField_Provincia.setEditable(false);
 		textField_Provincia.setSelectionColor(Color.LIGHT_GRAY);
 		textField_Provincia.setForeground(Color.BLACK);
 		textField_Provincia.setFont(new Font("Times New Roman", Font.ITALIC, 14));
@@ -189,7 +209,7 @@ public class Fattura extends JFrame implements ActionListener {
 		textField_Provincia.setBorder(null);
 		textField_Provincia.setBackground(new Color(255, 165, 0));
 		textField_Provincia.setBounds(36, 190, 158, 18);
-		getContentPane().add(textField_Provincia);	
+		getContentPane().add(textField_Provincia);		
 		
 		JLabel label_telefono = new JLabel("Telefono");
 		label_telefono.setForeground(Color.WHITE);
@@ -206,7 +226,7 @@ public class Fattura extends JFrame implements ActionListener {
 		separator_Telefono.setBounds(6, 270, 188, 12);
 		getContentPane().add(separator_Telefono);
 		
-		textField_Telefono = new JTextField();
+		textField_Telefono = new JTextField(utente.getNumeroTelefonico());
 		textField_Telefono.setSelectionColor(Color.LIGHT_GRAY);
 		textField_Telefono.setForeground(Color.BLACK);
 		textField_Telefono.setFont(new Font("Times New Roman", Font.ITALIC, 14));
@@ -215,6 +235,7 @@ public class Fattura extends JFrame implements ActionListener {
 		textField_Telefono.setBorder(null);
 		textField_Telefono.setBackground(new Color(255, 165, 0));
 		textField_Telefono.setBounds(26, 253, 168, 18);
+		textField_Telefono.setEditable(false);
 		getContentPane().add(textField_Telefono);
 				
 		JLabel label_indirizzoEmail = new JLabel("Indirizzo email");
@@ -232,7 +253,7 @@ public class Fattura extends JFrame implements ActionListener {
 		separator_IndirizzoEmail.setBounds(1, 327, 193, 12);
 		getContentPane().add(separator_IndirizzoEmail);
 		
-		textField_IndirizzoEmail = new JTextField();
+		textField_IndirizzoEmail = new JTextField(utente.getEmail());
 		textField_IndirizzoEmail.setSelectionColor(Color.LIGHT_GRAY);
 		textField_IndirizzoEmail.setForeground(Color.BLACK);
 		textField_IndirizzoEmail.setFont(new Font("Times New Roman", Font.ITALIC, 14));
@@ -241,6 +262,7 @@ public class Fattura extends JFrame implements ActionListener {
 		textField_IndirizzoEmail.setBorder(null);
 		textField_IndirizzoEmail.setBackground(new Color(255, 165, 0));
 		textField_IndirizzoEmail.setBounds(26, 310, 168, 18);
+		textField_IndirizzoEmail.setEditable(false);
 		getContentPane().add(textField_IndirizzoEmail);
 		
 		JLabel label_riders = new JLabel("Riders");
@@ -266,21 +288,26 @@ public class Fattura extends JFrame implements ActionListener {
 		panel_1.setBounds(6, 34, 276, 238);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
+
 		
 		JLabel label_prodotto = new JLabel("PRODOTTO");
 		label_prodotto.setForeground(Color.WHITE);
 		label_prodotto.setBounds(0, 6, 85, 16);
 		panel_1.add(label_prodotto);
 		
-		JLabel label_subTotale = new JLabel("SUBTOTALE");
-		label_subTotale.setForeground(Color.WHITE);
-		label_subTotale.setBounds(191, 6, 79, 16);
-		panel_1.add(label_subTotale);
-		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(0, 22, 276, 12);
 		panel_1.add(separator_1);
 		separator_1.setForeground(Color.WHITE);
+		
+		String[] prodottiNelCarrello = ottieniProdottiNelCarrello();
+		JList list = new JList(prodottiNelCarrello);
+		list.setBounds(10, 46, 253, 155);
+		list.setBackground(new Color(255, 140, 0));
+		panel_1.add(list);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 3, 3);
+		panel_1.add(scrollPane);
 		
 		JLabel label_Totale = new JLabel("TOTALE");
 		label_Totale.setForeground(Color.WHITE);
@@ -292,46 +319,81 @@ public class Fattura extends JFrame implements ActionListener {
 		separator_2.setBounds(0, 200, 276, 12);
 		panel_1.add(separator_2);
 		
-		JButton btnEffettuaOrdine = new JButton("Effettua Ordine");
+		btnEffettuaOrdine = new JButton("Effettua Ordine");
+		btnEffettuaOrdine.addActionListener(this);
 		btnEffettuaOrdine.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnEffettuaOrdine.setForeground(new Color(255, 165, 0));
 		btnEffettuaOrdine.setBounds(143, 295, 139, 29);
 		panel.add(btnEffettuaOrdine);
-		btnEffettuaOrdine.addActionListener(this);
 		btnEffettuaOrdine.setActionCommand(EffettuaOrdine_cmd);
 
-		JButton btnAnnulla = new JButton("Annulla");
+		btnAnnulla = new JButton("Annulla");
+		btnAnnulla.addActionListener(this);
 		btnAnnulla.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnAnnulla.setForeground(new  Color(255, 165, 0));
 		btnAnnulla.setBounds(6, 295, 139, 29);
 		panel.add(btnAnnulla);
-		btnAnnulla.addActionListener(this);
 		btnAnnulla.setActionCommand(Annulla_cmd);
 		
-		//comboBox_Riders = new JComboBox<Rider>(ctrl.getRiders());
+		JLabel prezzo = new JLabel(totaleCarrello());
+		prezzo.setBounds(209, 268, 53, 15);
+		panel.add(prezzo);
+		
+		associaRider();
+		
+		comboBox_Riders = new JComboBox(nomiRider);
 		comboBox_Riders.setBounds(3, 387, 199, 27);
+		comboBox_Riders.setSelectedIndex(0);
+		comboBox_Riders.addActionListener(this);
 		getContentPane().add(comboBox_Riders);
 
 	}
 
-	public void actionPerformed(ActionEvent e) {
-	    if(e.getActionCommand().equals(Annulla_cmd))
-		{
-		    ctrl.visualizzazioneMenu();
+	private String[] ottieniProdottiNelCarrello() {
+		String[] prodotti = new String[ctrl.ottieniCarrello().getQuantitaProdotto().size()];
+		int i = 0;
+		for(Prodotto p : ctrl.ottieniCarrello().getQuantitaProdotto().keySet()) {
+			prodotti[i++] = p.getNome() + " " + p.getPrezzo(); 
 		}
-		else if(e.getActionCommand().equals(EffettuaOrdine_cmd))
+		return prodotti;
+	}
+	
+	private String totaleCarrello() {
+		Double totale = ctrl.ottieniCarrello().getTotale();
+		return totale.toString();
+	}
+
+	public void actionPerformed(ActionEvent e) {
+	    if(e.getSource().equals(btnAnnulla))
 		{
-			// dao --> ordine
-//			ctrl.setRider((Rider) comboBox_Riders.getSelectedItem());
+	    	this.dispose();
+	    	ctrl.svuotaCarrello();
+		    ctrl.VisualizzaSceltaRistorante();
+		}
+		else if(e.getSource().equals(btnEffettuaOrdine))
+		{
+			ctrl.effettuaOrdine();
 			JOptionPane.showMessageDialog(null, "Ordine effettuato con successo");
-			ctrl.visualizzazioneMenu();
-	    }
-		else if(e.getActionCommand().equals(Indietro_cmd))
-		{
-			 ctrl.visualizzazioneMenu();
+	    	this.dispose();
+		    ctrl.VisualizzaSceltaRistorante();
+	    }else if(e.getSource().equals(comboBox_Riders)) {
+	    	Rider riderSelezionato = this.riderDisponibili[comboBox_Riders.getSelectedIndex()];
+	    	ctrl.setRiderSelezionato(riderSelezionato);
 	    }
      }
 	
+	private void associaRider() {
+		ArrayList<Rider> riders = ctrl.ottieniRiderDelRistorante();
+		int length = riders.size();
+		this.riderDisponibili = new Rider[length];
+		this.nomiRider = new String[length];
+		int i = 0;
+		for(Rider r : riders) {
+			this.riderDisponibili[i] = r;
+			this.nomiRider[i] = r.getNome();
+			i++;
+		}
+	}
 }
 	
 	

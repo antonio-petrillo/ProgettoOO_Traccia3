@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Classi.Prodotto;
 import Classi.Ristorante;
 
 public interface DaoRistorante {
@@ -16,4 +17,7 @@ public interface DaoRistorante {
 
 	public HashMap<Integer, ArrayList<Integer>> ottieniAssociazioni() throws SQLException, ClassNotFoundException;
 	
+
+	public void aggiornaForniture(Ristorante ristorante, HashMap<Prodotto, Integer> prodottiDaAggiornare) throws ClassNotFoundException, SQLException;
+
 }

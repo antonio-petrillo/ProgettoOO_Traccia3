@@ -7,6 +7,7 @@ import java.util.Set;
 public class Rider {
 	
 	private String nome;
+
 	private String cognome;
 	private String biografia;
 	private Image fotoRider;
@@ -28,6 +29,10 @@ public class Rider {
 		this.pathFoto = pathFoto;
 		this.codiceRider = codiceRider;
 		this.parcoVeicoli = parcoVeicoli;
+	}
+
+	public String getNome() {
+		return nome;
 	}
 	
 	public void addRistoranteAssociato(Ristorante ristorante) {

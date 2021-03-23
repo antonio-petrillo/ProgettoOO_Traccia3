@@ -24,25 +24,4 @@ public class DaoCarrelloDatabase implements DaoCarrello {
 		return carrello;
 	}
 	
-	public boolean inserisciCarrello(Carrello carrello) {
-		boolean insertSucced = false;
-		String query = "INSERT INTO composizioneCarrello(codiceCarrello, codiceSeriale, quantita) VALUES(?, ?, ?)";
-		try {
-			Connection connection = DBconnection.getInstance().getConn();
-			int codiceCarrello = carrello.getCodiceCarrello();
-			for(Prodotto prodotto : carrello.getProdotti()) {
-				int codiceSeriale = prodotto.getCodiceSeriale();
-				int quantita = carrello.getQuantitaProdotto().get(prodotto);
-				PreparedStatement stmt = connection.prepareStatement(query);
-				stmt.setInt(1, codiceCarrello);
-				stmt.setInt(2, codiceSeriale);
-				stmt.setInt(3, quantita);
-				insertSucced = stmt.execute();
-			}
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
-		return insertSucced;
-	}
-
 }
